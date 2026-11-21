@@ -51,7 +51,7 @@ function ogSeason(s) {
 	      <div style="margin-top:26px;font:500 22px ${SANS};color:#2B2A29">${esc(traits)}</div>
 	      <div style="margin-top:8px;font:20px ${SANS};color:#6B6560">${esc(alt)}</div>
 	    </div>
-	    <div style="font:600 19px ${SANS};color:#6B6560">Seasonal Color Analysis</div>
+	    <div style="font:600 19px ${SANS};color:#6B6560">Color Analysis</div>
 	  </div>
 	  <div style="flex:1;display:flex;flex-direction:column;gap:14px">
 	    <div style="flex:1;display:grid;grid-template-columns:repeat(5,1fr);gap:12px">
@@ -78,7 +78,7 @@ function paletteSeason(s) {
 	  ${groups.map(([title, cat]) => `
 	    <div style="font:700 14px ${SANS};letter-spacing:.1em;text-transform:uppercase;color:#6B6560;margin:18px 0 10px">${title}</div>
 	    <div style="display:grid;grid-template-columns:repeat(${cat === 'core' ? 6 : 6},1fr);gap:14px 16px">${pal.filter((c) => c[2] === cat).map(cell).join('')}</div>`).join('')}
-	  <div style="margin-top:22px;font:15px ${SANS};color:#8A837C">Seasonal Color Analysis · A guide, not a professional color analysis</div>
+	  <div style="margin-top:22px;font:15px ${SANS};color:#8A837C">Color Analysis · A guide, not a professional color analysis</div>
 	</div>`, 1200, 900);
 }
 
@@ -91,7 +91,7 @@ function ogDefault() {
 	return page(`
 	<div style="display:flex;height:630px;padding:56px;gap:56px;align-items:center">
 	  <div style="flex:0 0 430px">
-	    <div style="font:600 64px/1.05 ${SERIF}">Seasonal Color Analysis</div>
+	    <div style="font:600 64px/1.05 ${SERIF}">Color Analysis</div>
 	    <div style="font:24px/1.4 ${SANS};color:#6B6560;margin-top:20px">Free quiz, 12 season palettes with hex codes and a palette generator.</div>
 	    <div style="font:700 18px ${SANS};letter-spacing:.12em;text-transform:uppercase;color:#9F543F;margin-top:28px">Find your colors</div>
 	  </div>

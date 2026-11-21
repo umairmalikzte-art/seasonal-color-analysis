@@ -337,3 +337,12 @@
 .sca-figure { margin: 1.5rem 0 2rem; }
 .sca-figure img { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--sca-line, #e6ddd1); }
 .sca-figure figcaption { margin-top: .5rem; font-size: .88rem; color: var(--sca-muted, #6b6560); }
+
+/* Named swatches in guides ([sca_swatches]) */
+.sca-swatches { margin: 1.2em 0; }
+.sca-swatches__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; list-style: none; margin: 0; padding: 0; }
+.sca-swatches__list li { margin: 0; display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
+.sca-swatches__chip { display: block; height: 64px; border-radius: 10px; border: 1px solid rgba(0,0,0,.1); margin-bottom: 4px; }
+.sca-swatches__name { font-weight: 600; line-height: 1.25; }
+.sca-swatches code { font-size: 12px; color: var(--sca-muted, #6b6560); background: none; padding: 0; }
+.sca-swatches figcaption { font-size: 14px; color: var(--sca-muted, #6b6560); margin-top: 8px; }

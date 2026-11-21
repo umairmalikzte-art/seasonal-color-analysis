@@ -9,7 +9,7 @@
 		{
 			"step": "setSiteOptions",
 			"options": {
-				"blogname": "Seasonal Color Analysis",
+				"blogname": "Color Analysis",
 				"blogdescription": "Find Your Colors. Understand Your Style.",
 				"permalink_structure": "/%postname%/",
 				"timezone_string": "America/New_York",

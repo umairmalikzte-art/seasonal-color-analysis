@@ -1,6 +1,6 @@
 # PRD status (v1.0)
 
-Last updated: 21 November 2026. The site runs locally in WordPress
+Last updated: 22 November 2026. The site runs locally in WordPress
 Playground. It has not been deployed.
 
 ## Acceptance criteria (PRD section 21)
@@ -59,6 +59,23 @@ the same machine that was running the server.
 
 - **Palette generator (PRD tool C and more):** five harmonies, trend colors mapped to each season, a "check my colors" tab and an admin Trends page.
 - **SEO, AEO and performance:** see SEO-STRATEGY.md. The homepage hero starts the quiz with plain links.
+
+## Added on 22 November 2026 (competitor gap work)
+
+- **Site renamed to "Color Analysis"** (title, SEO brand, schema, footer).
+- **AI color analysis from a photo** (`[sca_photo]`, `/ai-color-analysis/`,
+  also on `/skin-tone-test/`). In-browser only; 20 new unit tests
+  (`tests/photo.test.js`), 58 tests in total.
+- **20 new guides:** skin tone, undertone, the four season families and
+  styling. See [COMPETITOR-GAP.md](COMPETITOR-GAP.md).
+- Homepage, quiz, About, Color Guides and Privacy pages rewritten; 12-seasons
+  page fixes.
+- Not yet checked in Playground from this change (the Playground download was
+  blocked in the build environment). Content was rendered through a PHP
+  harness, links checked (0 broken) and the photo tool tested in Chromium at
+  1100 px and 390 px (no overflow, no console errors). **Run `npm start` and
+  check the new pages before merging.**
+- OG images still show the old name until `npm run build:images` is run.
 
 ## Next
 

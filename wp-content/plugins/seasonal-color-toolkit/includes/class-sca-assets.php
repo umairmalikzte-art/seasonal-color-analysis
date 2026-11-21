@@ -61,6 +61,8 @@ class SCA_Assets {
 		wp_register_script( 'sca-palette', SCA_URL . self::file( 'assets/js/sca-palette.js' ), array(), self::ver( 'assets/js/sca-palette.js' ), $defer );
 		wp_register_script( 'sca-color', SCA_URL . self::file( 'assets/js/sca-color.js' ), array(), self::ver( 'assets/js/sca-color.js' ), $defer );
 		wp_register_script( 'sca-generator', SCA_URL . self::file( 'assets/js/sca-generator.js' ), array( 'sca-color', 'sca-palette' ), self::ver( 'assets/js/sca-generator.js' ), $defer );
+		wp_register_script( 'sca-photo-measure', SCA_URL . self::file( 'assets/js/sca-photo-measure.js' ), array(), self::ver( 'assets/js/sca-photo-measure.js' ), $defer );
+		wp_register_script( 'sca-photo', SCA_URL . self::file( 'assets/js/sca-photo.js' ), array( 'sca-engine', 'sca-photo-measure' ), self::ver( 'assets/js/sca-photo.js' ), $defer );
 		wp_register_script( 'sca-quiz', SCA_URL . self::file( 'assets/js/sca-quiz.js' ), array( 'sca-engine', 'sca-palette' ), self::ver( 'assets/js/sca-quiz.js' ), $defer );
 	}
 
@@ -83,6 +85,9 @@ class SCA_Assets {
 		}
 		if ( has_shortcode( $content, 'sca_generator' ) ) {
 			self::enqueue_generator();
+		}
+		if ( has_shortcode( $content, 'sca_photo' ) ) {
+			self::enqueue_photo();
 		}
 		foreach ( array( 'sca_palette', 'sca_palette_explorer', 'sca_compare' ) as $tag ) {
 			if ( has_shortcode( $content, $tag ) ) {
@@ -124,5 +129,39 @@ class SCA_Assets {
 			self::$config_done = true;
 			wp_add_inline_script( 'sca-quiz', 'window.SCA_CONFIG = ' . wp_json_encode( SCA_Repository::frontend_config( true ) ) . ';', 'before' );
 		}
+	}
+
+	/** @var bool Photo tool config and CSS already added. */
+	private static $photo_done = false;
+
+	/** AI color analysis: measurement, engine, UI, its CSS and the season data. */
+	public static function enqueue_photo() {
+		self::style();
+		wp_enqueue_script( 'sca-photo' );
+		if ( self::$photo_done ) {
+			return;
+		}
+		self::$photo_done = true;
+		$css = (string) file_get_contents( SCA_DIR . 'assets/css/sca-photo.css' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$css = (string) preg_replace( '#/\*.*?\*/#s', '', $css );
+		$css = (string) preg_replace( '/\s+/', ' ', $css );
+		wp_add_inline_style( 'sca', trim( $css ) );
+		$config = SCA_Repository::frontend_config( false );
+		$guide  = static function ( $slug ) {
+			$found = get_posts( array( 'name' => $slug, 'post_type' => 'color_guide', 'post_status' => 'publish', 'numberposts' => 1 ) );
+			return $found ? get_permalink( $found[0] ) : '';
+		};
+		$data = array(
+			'seasons'    => $config['seasons'],
+			'settings'   => $config['settings'],
+			'quizUrl'    => $config['quizUrl'],
+			'compareUrl' => $config['compareUrl'],
+			'site'       => wp_parse_url( home_url(), PHP_URL_HOST ),
+			'guides'     => array(
+				'skin'      => $guide( 'skin-tone-chart' ),
+				'undertone' => $guide( 'warm-vs-cool-undertone' ),
+			),
+		);
+		wp_add_inline_script( 'sca-photo', 'window.SCA_PHOTO = ' . wp_json_encode( $data ) . ';', 'before' );
 	}
 }

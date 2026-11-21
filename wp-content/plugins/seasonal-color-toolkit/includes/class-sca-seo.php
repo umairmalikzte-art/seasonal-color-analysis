@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  */
 class SCA_SEO {
 
-	const BRAND = 'Seasonal Color Analysis';
+	const BRAND = 'Color Analysis';
 
 	/** Hooks. */
 	public static function init() {
@@ -61,7 +61,7 @@ class SCA_SEO {
 	public static function current_title() {
 		if ( is_front_page() ) {
 			$custom = get_post_meta( (int) get_option( 'page_on_front' ), '_sca_seo_title', true );
-			return $custom ? $custom : self::BRAND . ': Free Quiz & 12 Season Palettes';
+			return $custom ? $custom : self::BRAND . ': Free AI Photo Test & Seasonal Quiz';
 		}
 		if ( is_singular() ) {
 			$custom = get_post_meta( get_queried_object_id(), '_sca_seo_title', true );
@@ -331,13 +331,46 @@ class SCA_SEO {
 		// Page-specific types.
 		if ( is_front_page() ) {
 			$webpage['about']    = self::thing( 'color_analysis' );
+			$graph[]             = array(
+				'@type'               => 'WebApplication',
+				'@id'                 => $url . '#app',
+				'name'                => 'AI Color Analysis',
+				'url'                 => $url . '#ai-color-analysis',
+				'applicationCategory' => 'LifestyleApplication',
+				'operatingSystem'     => 'Any (web browser)',
+				'isAccessibleForFree' => true,
+				'offers'              => array( '@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'USD' ),
+				'publisher'           => array( '@id' => $org_id ),
+			);
 			$webpage['mentions'] = array( self::thing( 'munsell' ), self::thing( 'hue' ), self::thing( 'lightness' ), self::thing( 'chroma' ), self::thing( 'contrast' ), self::thing( 'skin' ) );
+		} elseif ( 'ai-color-analysis' === $slug || 'skin-tone-test' === $slug ) {
+			$graph[] = array(
+				'@type'               => 'WebApplication',
+				'@id'                 => $url . '#app',
+				'name'                => 'ai-color-analysis' === $slug ? 'AI Color Analysis' : 'Skin Tone and Undertone Test',
+				'url'                 => $url,
+				'applicationCategory' => 'LifestyleApplication',
+				'operatingSystem'     => 'Any (web browser)',
+				'browserRequirements' => 'Requires JavaScript',
+				'isAccessibleForFree' => true,
+				'offers'              => array(
+					'@type'         => 'Offer',
+					'price'         => '0',
+					'priceCurrency' => 'USD',
+				),
+				'featureList'         => array( 'Color analysis from a selfie or camera photo', 'The photo is analysed in the browser and never uploaded', 'Face detection and white balance correction from the eye whites', 'Skin tone, undertone, depth, chroma and contrast', '12-season match with the top 3 and a confidence score', 'Virtual draping with best and wear-with-care colors', 'Downloadable palette card with hex codes' ),
+				'publisher'           => array( '@id' => $org_id ),
+				'about'               => self::thing( 'color_analysis' ),
+			);
+			$webpage['mainEntity'] = array( '@id' => $url . '#app' );
+			$webpage['about']      = self::thing( 'color_analysis' );
+			$webpage['mentions']   = array( self::thing( 'skin' ), self::thing( 'chroma' ), self::thing( 'contrast' ) );
 		} elseif ( 'seasonal-color-analysis-quiz' === $slug || 'seasonal-color-palette-generator' === $slug ) {
 			$is_quiz = 'seasonal-color-analysis-quiz' === $slug;
 			$graph[] = array(
 				'@type'               => 'WebApplication',
 				'@id'                 => $url . '#app',
-				'name'                => $is_quiz ? 'Seasonal Color Analysis Quiz' : 'Seasonal Color Palette Generator',
+				'name'                => $is_quiz ? 'Color Analysis Quiz' : 'Seasonal Color Palette Generator',
 				'url'                 => $url,
 				'applicationCategory' => 'LifestyleApplication',
 				'operatingSystem'     => 'Any (web browser)',
@@ -565,9 +598,9 @@ class SCA_SEO {
 		if ( ! get_query_var( 'sca_llms' ) ) {
 			return;
 		}
-		$lines   = array( '# ' . self::BRAND, '', '> Free seasonal color analysis: a 15-question quiz, 12 season palettes with hex codes, a palette generator with trend colors, a season comparison tool and styling guides. Quiz answers stay in the browser.', '' );
+		$lines   = array( '# ' . self::BRAND, '', '> Free color analysis: AI color analysis from a selfie (analysed in the browser, never uploaded), a 15-question seasonal color quiz, 12 season palettes with hex codes, a palette generator with trend colors, a season comparison tool and styling guides. Quiz answers stay in the browser.', '' );
 		$lines[] = '## Tools';
-		foreach ( array( 'seasonal-color-analysis-quiz', 'seasonal-color-palette-generator', 'compare-seasons' ) as $p ) {
+		foreach ( array( 'ai-color-analysis', 'seasonal-color-analysis-quiz', 'seasonal-color-palette-generator', 'compare-seasons' ) as $p ) {
 			$page = get_page_by_path( $p );
 			if ( $page ) {
 				$lines[] = '- [' . get_the_title( $page ) . '](' . get_permalink( $page ) . '): ' . wp_strip_all_tags( $page->post_excerpt );

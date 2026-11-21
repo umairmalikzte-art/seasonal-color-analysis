@@ -33,6 +33,8 @@ class SCA_Shortcodes {
 			'sca_content_list'     => 'content_list',
 			'sca_generator'        => 'generator',
 			'sca_trend_table'      => 'trend_table',
+			'sca_photo'            => 'photo',
+			'sca_swatches'         => 'swatches',
 		);
 		foreach ( $codes as $tag => $method ) {
 			add_shortcode( $tag, array( __CLASS__, $method ) );
@@ -536,6 +538,95 @@ class SCA_Shortcodes {
 			}
 		}
 		return $html . '</div>';
+	}
+
+	/**
+	 * [sca_photo] AI color analysis from a selfie. The photo is analysed in
+	 * the browser and never uploaded.
+	 */
+	public static function photo() {
+		SCA_Assets::enqueue_photo();
+		$tips = array(
+			array( __( 'Daylight', 'seasonal-color-toolkit' ), __( 'from a window, not yellow indoor bulbs', 'seasonal-color-toolkit' ) ),
+			array( __( 'No filter', 'seasonal-color-toolkit' ), __( 'no beauty mode or heavy makeup', 'seasonal-color-toolkit' ) ),
+			array( __( 'Hair visible', 'seasonal-color-toolkit' ), __( 'at the hairline, eyes open', 'seasonal-color-toolkit' ) ),
+		);
+		$questions = array(
+			'veins'   => array( __( 'Veins on your inner wrist look…', 'seasonal-color-toolkit' ), array( 'blue' => __( 'Blue or purple', 'seasonal-color-toolkit' ), 'green' => __( 'Green or olive', 'seasonal-color-toolkit' ), 'both' => __( 'Both / can\'t tell', 'seasonal-color-toolkit' ) ) ),
+			'metal'   => array( __( 'Which jewelry flatters you more?', 'seasonal-color-toolkit' ), array( 'silver' => __( 'Silver or platinum', 'seasonal-color-toolkit' ), 'gold' => __( 'Gold', 'seasonal-color-toolkit' ), 'both' => __( 'Both look fine', 'seasonal-color-toolkit' ) ) ),
+			'sun'     => array( __( 'In the sun, your skin usually…', 'seasonal-color-toolkit' ), array( 'burn' => __( 'Burns or turns pink', 'seasonal-color-toolkit' ), 'tan' => __( 'Tans golden easily', 'seasonal-color-toolkit' ), 'both' => __( 'Burns, then tans', 'seasonal-color-toolkit' ) ) ),
+			'white'   => array( __( 'Which white looks better next to your face?', 'seasonal-color-toolkit' ), array( 'bright' => __( 'Pure bright white', 'seasonal-color-toolkit' ), 'cream' => __( 'Cream or ivory', 'seasonal-color-toolkit' ), 'both' => __( 'No difference', 'seasonal-color-toolkit' ) ) ),
+			'hairnow' => array( __( 'Your hair in the photo is…', 'seasonal-color-toolkit' ), array( 'natural' => __( 'My natural color', 'seasonal-color-toolkit' ), 'dyed' => __( 'Dyed or highlighted', 'seasonal-color-toolkit' ), 'gray' => __( 'Mostly gray', 'seasonal-color-toolkit' ) ) ),
+		);
+
+		$h  = '<div class="sca-ph" id="ai-color-analysis-tool">';
+		$h .= '<ol class="sca-ph-progress" aria-label="' . esc_attr__( 'Steps', 'seasonal-color-toolkit' ) . '"><li class="is-active">' . esc_html__( 'Photo', 'seasonal-color-toolkit' ) . '</li><li>' . esc_html__( 'Check', 'seasonal-color-toolkit' ) . '</li><li>' . esc_html__( 'Refine', 'seasonal-color-toolkit' ) . '</li><li>' . esc_html__( 'Result', 'seasonal-color-toolkit' ) . '</li></ol>';
+
+		// Step 1: photo.
+		$h .= '<section class="sca-ph-step" data-step="1"><div class="sca-ph-drop">';
+		$h .= '<svg viewBox="0 0 48 48" width="48" height="48" aria-hidden="true"><circle cx="24" cy="18" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M8 42c2.5-8 9-12 16-12s13.5 4 16 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>';
+		$h .= '<h3>' . esc_html__( 'Upload a selfie or use your camera', 'seasonal-color-toolkit' ) . '</h3>';
+		$h .= '<p>' . esc_html__( 'Face a window in daylight, without makeup or filters, with your hair off your face.', 'seasonal-color-toolkit' ) . '</p>';
+		$h .= '<div class="sca-ph-actions"><label class="sca-btn sca-btn--primary sca-ph-upload">' . esc_html__( 'Choose a photo', 'seasonal-color-toolkit' ) . '<input class="sca-ph-file" type="file" accept="image/*"></label>';
+		$h .= '<button type="button" class="sca-btn sca-btn--ghost" data-act="camera">' . esc_html__( 'Use my camera', 'seasonal-color-toolkit' ) . '</button></div>';
+		$h .= '<p class="sca-ph-private"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3z" fill="none" stroke="currentColor" stroke-width="2"/></svg>' . esc_html__( 'Your photo never leaves your device. It is analysed in your browser and is not uploaded or stored.', 'seasonal-color-toolkit' ) . '</p>';
+		$h .= '</div><div class="sca-ph-cam" hidden><video class="sca-ph-video" playsinline muted></video><div class="sca-ph-actions"><button type="button" class="sca-btn sca-btn--primary" data-act="snap">' . esc_html__( 'Take photo', 'seasonal-color-toolkit' ) . '</button><button type="button" class="sca-btn sca-btn--ghost" data-act="cam-cancel">' . esc_html__( 'Cancel', 'seasonal-color-toolkit' ) . '</button></div></div>';
+		$h .= '<ul class="sca-ph-tips" role="list">';
+		foreach ( $tips as $t ) {
+			$h .= '<li><b>' . esc_html( $t[0] ) . '</b>' . esc_html( $t[1] ) . '</li>';
+		}
+		$h .= '</ul></section>';
+
+		// Step 2: check samples.
+		$h .= '<section class="sca-ph-step" data-step="2" hidden><div class="sca-ph-check"><div><canvas class="sca-ph-photo" aria-label="' . esc_attr__( 'Your photo with the sampled points', 'seasonal-color-toolkit' ) . '"></canvas></div><div>';
+		$h .= '<p class="sca-ph-status" role="status" aria-live="polite"></p>';
+		$h .= '<div class="sca-ph-manual" hidden><p>' . esc_html__( 'Tap the photo to pick each color:', 'seasonal-color-toolkit' ) . '</p><div class="sca-ph-taps">';
+		foreach ( array( 'skin' => __( '1. Skin (cheek)', 'seasonal-color-toolkit' ), 'hair' => __( '2. Hair (roots)', 'seasonal-color-toolkit' ), 'eyes' => __( '3. Eye (iris)', 'seasonal-color-toolkit' ), 'sclera' => __( '4. Eye white (optional)', 'seasonal-color-toolkit' ) ) as $k => $label ) {
+			$h .= '<button type="button" data-tap="' . esc_attr( $k ) . '" aria-pressed="false">' . esc_html( $label ) . '</button>';
+		}
+		$h .= '</div></div><div class="sca-ph-samples"></div><div class="sca-ph-quality"></div>';
+		$h .= '<div class="sca-ph-actions"><button type="button" class="sca-btn sca-btn--primary sca-ph-next" data-act="next" disabled>' . esc_html__( 'Continue', 'seasonal-color-toolkit' ) . '</button><button type="button" class="sca-btn sca-btn--ghost" data-act="manual">' . esc_html__( 'Pick colors myself', 'seasonal-color-toolkit' ) . '</button><button type="button" class="sca-btn sca-btn--ghost" data-act="back">' . esc_html__( 'Use another photo', 'seasonal-color-toolkit' ) . '</button></div>';
+		$h .= '</div></div></section>';
+
+		// Step 3: refine.
+		$h .= '<section class="sca-ph-step" data-step="3" hidden><h3>' . esc_html__( 'Five quick questions to sharpen your result', 'seasonal-color-toolkit' ) . '</h3><p class="sca-ph-help">' . esc_html__( 'Cameras shift skin tone. Your answers correct for that. You can skip them.', 'seasonal-color-toolkit' ) . '</p>';
+		foreach ( $questions as $name => $q ) {
+			$h .= '<fieldset class="sca-ph-q"><legend>' . esc_html( $q[0] ) . '</legend>';
+			foreach ( $q[1] as $val => $label ) {
+				$h .= '<label><input type="radio" name="' . esc_attr( $name ) . '" value="' . esc_attr( $val ) . '"> ' . esc_html( $label ) . '</label>';
+			}
+			$h .= '</fieldset>';
+		}
+		$h .= '<div class="sca-ph-actions"><button type="button" class="sca-btn sca-btn--primary" data-act="result">' . esc_html__( 'Show my color season', 'seasonal-color-toolkit' ) . '</button><button type="button" class="sca-btn sca-btn--ghost" data-act="skip">' . esc_html__( 'Skip the questions', 'seasonal-color-toolkit' ) . '</button></div></section>';
+
+		// Step 4: result.
+		$h .= '<section class="sca-ph-step" data-step="4" hidden><div class="sca-ph-result" aria-live="polite"></div></section>';
+		$h .= '<noscript><p>' . esc_html__( 'The AI color analysis needs JavaScript. You can take the quiz instead.', 'seasonal-color-toolkit' ) . '</p></noscript>';
+		return $h . '</div>';
+	}
+
+	/**
+	 * [sca_swatches colors="Porcelain:#F6E3D7,Ivory:#F1D6C1" caption=""]
+	 * Static named swatches for guides (skin tone charts, color pairs).
+	 */
+	public static function swatches( $atts ) {
+		$atts = shortcode_atts( array( 'colors' => '', 'caption' => '' ), $atts, 'sca_swatches' );
+		SCA_Assets::style();
+		$html = '<figure class="sca-swatches"><ul class="sca-swatches__list" role="list">';
+		foreach ( SCA_Repository::split( $atts['colors'] ) as $item ) {
+			$parts = explode( ':', $item );
+			$hex   = sanitize_hex_color( trim( (string) end( $parts ) ) );
+			if ( ! $hex ) {
+				continue;
+			}
+			$name  = count( $parts ) > 1 ? trim( $parts[0] ) : '';
+			$html .= '<li><span class="sca-swatches__chip" style="background:' . esc_attr( $hex ) . '"></span><span class="sca-swatches__name">' . esc_html( $name ) . '</span><code>' . esc_html( strtoupper( $hex ) ) . '</code></li>';
+		}
+		$html .= '</ul>';
+		if ( '' !== $atts['caption'] ) {
+			$html .= '<figcaption>' . esc_html( $atts['caption'] ) . '</figcaption>';
+		}
+		return $html . '</figure>';
 	}
 
 	/** [sca_content_list type="color_guide,season_comparison"] Linked list of published guides. */

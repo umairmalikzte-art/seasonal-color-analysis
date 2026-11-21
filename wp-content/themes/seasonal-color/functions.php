@@ -68,7 +68,7 @@ add_filter(
 		}
 		$html .= '</ul>';
 		/* translators: %s: year */
-		$html .= '<span>' . esc_html( sprintf( __( '© %s Seasonal Color Analysis. Palettes are a guide, not a professional color analysis.', 'seasonal-color' ), gmdate( 'Y' ) ) ) . '</span>';
+		$html .= '<span>' . esc_html( sprintf( __( '© %s Color Analysis. Palettes are a guide, not a professional color analysis.', 'seasonal-color' ), gmdate( 'Y' ) ) ) . '</span>';
 		return $html;
 	}
 );

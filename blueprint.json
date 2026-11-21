@@ -1,0 +1,42 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"landingPage": "/",
+	"preferredVersions": {
+		"php": "8.3",
+		"wp": "latest"
+	},
+	"steps": [
+		{
+			"step": "setSiteOptions",
+			"options": {
+				"blogname": "Seasonal Color Analysis",
+				"blogdescription": "Find Your Colors. Understand Your Style.",
+				"permalink_structure": "/%postname%/",
+				"timezone_string": "America/New_York",
+				"date_format": "F j, Y"
+			}
+		},
+		{
+			"step": "installTheme",
+			"themeData": {
+				"resource": "wordpress.org/themes",
+				"slug": "generatepress"
+			},
+			"options": {
+				"activate": false
+			}
+		},
+		{
+			"step": "activateTheme",
+			"themeFolderName": "seasonal-color"
+		},
+		{
+			"step": "activatePlugin",
+			"pluginPath": "seasonal-color-toolkit/seasonal-color-toolkit.php"
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php require_once '/wordpress/wp-load.php'; require '/wordpress/sca-setup/seed.php';"
+		}
+	]
+}

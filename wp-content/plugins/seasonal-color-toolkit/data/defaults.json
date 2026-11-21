@@ -1,0 +1,203 @@
+{
+  "version": 1,
+  "settings": {
+    "weights": { "warmth": 1.0, "depth": 1.0, "chroma": 1.0, "contrast": 0.7 },
+    "thresholds": { "margin": 0.08, "strong_distance": 0.45, "moderate_distance": 0.8, "min_answered": 10 }
+  },
+  "seasons": [
+    { "slug": "light-spring", "name": "Light Spring", "family": "spring", "warmth": 0.4, "depth": -0.8, "chroma": 0.3, "contrast": -0.4, "alt_names": "", "neighbors": "light-summer,true-spring", "description": "Light, warm and gently clear. Light Spring colors look like a bright spring morning: soft peach, buttercup yellow, aqua and periwinkle." },
+    { "slug": "true-spring", "name": "True Spring", "family": "spring", "warmth": 0.9, "depth": -0.2, "chroma": 0.6, "contrast": 0.0, "alt_names": "Warm Spring", "neighbors": "true-autumn,light-spring", "description": "The warmest Spring. True Spring colors are golden, fresh and clear, like coral, daffodil yellow, kelly green and turquoise." },
+    { "slug": "bright-spring", "name": "Bright Spring", "family": "spring", "warmth": 0.4, "depth": -0.1, "chroma": 0.9, "contrast": 0.6, "alt_names": "Clear Spring", "neighbors": "bright-winter,true-spring", "description": "Clear, saturated and slightly warm. Bright Spring colors are vivid and lively, like hot coral, emerald, bright turquoise and clear royal blue." },
+    { "slug": "light-summer", "name": "Light Summer", "family": "summer", "warmth": -0.4, "depth": -0.8, "chroma": -0.2, "contrast": -0.5, "alt_names": "", "neighbors": "light-spring,true-summer", "description": "Light, cool and soft. Light Summer colors are airy pastels with a cool cast, like powder blue, lavender, powder pink and aqua mist." },
+    { "slug": "true-summer", "name": "True Summer", "family": "summer", "warmth": -0.9, "depth": -0.2, "chroma": -0.4, "contrast": -0.2, "alt_names": "Cool Summer", "neighbors": "true-winter,soft-summer", "description": "The coolest Summer. True Summer colors are cool, medium and gently muted, like raspberry, periwinkle, cadet blue and plum." },
+    { "slug": "soft-summer", "name": "Soft Summer", "family": "summer", "warmth": -0.4, "depth": 0.0, "chroma": -0.9, "contrast": -0.4, "alt_names": "", "neighbors": "soft-autumn,true-summer", "description": "Muted, cool-neutral and medium. Soft Summer colors are smoky and blended, like dusty rose, slate blue, gray sage and mauve." },
+    { "slug": "soft-autumn", "name": "Soft Autumn", "family": "autumn", "warmth": 0.4, "depth": 0.0, "chroma": -0.9, "contrast": -0.4, "alt_names": "", "neighbors": "soft-summer,true-autumn", "description": "Muted, warm-neutral and medium. Soft Autumn colors are earthy and gentle, like sage, terracotta, soft teal and golden wheat." },
+    { "slug": "true-autumn", "name": "True Autumn", "family": "autumn", "warmth": 0.9, "depth": 0.3, "chroma": -0.4, "contrast": 0.0, "alt_names": "Warm Autumn", "neighbors": "true-spring,deep-autumn", "description": "The warmest Autumn. True Autumn colors are rich, golden and earthy, like rust, pumpkin, mustard, moss and warm teal." },
+    { "slug": "deep-autumn", "name": "Deep Autumn", "family": "autumn", "warmth": 0.4, "depth": 0.8, "chroma": -0.2, "contrast": 0.4, "alt_names": "Dark Autumn", "neighbors": "deep-winter,true-autumn", "description": "Deep, warm-neutral and rich. Deep Autumn colors are dark and spicy, like oxblood, deep olive, forest green and deep teal." },
+    { "slug": "deep-winter", "name": "Deep Winter", "family": "winter", "warmth": -0.4, "depth": 0.8, "chroma": 0.2, "contrast": 0.7, "alt_names": "Dark Winter", "neighbors": "deep-autumn,true-winter", "description": "Deep, cool-neutral and dramatic. Deep Winter colors are dark jewel tones, like burgundy, sapphire, emerald and deep plum." },
+    { "slug": "true-winter", "name": "True Winter", "family": "winter", "warmth": -0.8, "depth": 0.3, "chroma": 0.6, "contrast": 0.8, "alt_names": "Cool Winter", "neighbors": "true-summer,bright-winter", "description": "The coolest Winter. True Winter colors are icy, clear and high in contrast, like blue-red, cobalt, magenta and pure white." },
+    { "slug": "bright-winter", "name": "Bright Winter", "family": "winter", "warmth": -0.4, "depth": 0.1, "chroma": 0.9, "contrast": 0.9, "alt_names": "Clear Winter", "neighbors": "bright-spring,true-winter", "description": "The brightest season. Bright Winter colors are electric and cool-leaning, like hot pink, electric blue, bright turquoise and black." }
+  ],
+  "palettes": {
+    "light-spring": [
+      ["Ivory", "#FFF8E7", "neutral"], ["Warm Sand", "#E6CFA9", "neutral"], ["Light Camel", "#D9B88F", "neutral"], ["Light Cocoa", "#B08968", "neutral"], ["Light Warm Gray", "#C9C0B1", "neutral"], ["Soft Navy", "#5B6E8F", "neutral"],
+      ["Peach", "#FFCBA4", "core"], ["Light Coral", "#F4A28C", "core"], ["Salmon Pink", "#F9A88F", "core"], ["Buttercup Yellow", "#FBE38E", "core"], ["Light Gold", "#F2D27A", "core"], ["Apple Green", "#A6D785", "core"], ["Mint", "#A8E6CF", "core"], ["Light Aqua", "#8FD8D2", "core"], ["Light Turquoise", "#6FD0C5", "core"], ["Clear Sky Blue", "#8EC9F0", "core"], ["Periwinkle", "#9FB1E3", "core"], ["Light Violet", "#B9A3E3", "core"],
+      ["Bright Coral", "#FF7F6B", "accent"], ["Light Tangerine", "#FFA45C", "accent"], ["Golden Yellow", "#F7C948", "accent"], ["Spring Green", "#6CCB8E", "accent"], ["Aqua Blue", "#4FC1D6", "accent"], ["Warm Rose", "#F08BA0", "accent"],
+      ["Black", "#111111", "avoid"], ["Charcoal", "#36373B", "avoid"], ["Burgundy", "#6D1A36", "avoid"], ["Dark Olive", "#4B5320", "avoid"]
+    ],
+    "true-spring": [
+      ["Cream", "#FFF3D6", "neutral"], ["Warm Beige", "#E1C699", "neutral"], ["Camel", "#C19A6B", "neutral"], ["Golden Brown", "#996515", "neutral"], ["Warm Gray", "#A8998A", "neutral"], ["Light Navy", "#3F5A8A", "neutral"],
+      ["Coral", "#FF7F50", "core"], ["Salmon", "#FA8072", "core"], ["Peach", "#FFB38A", "core"], ["Tomato Red", "#F0533A", "core"], ["Warm Orange", "#F28C28", "core"], ["Apricot", "#FBB474", "core"], ["Daffodil Yellow", "#FFD447", "core"], ["Lime Green", "#A3C93A", "core"], ["Kelly Green", "#4CBB17", "core"], ["Turquoise", "#30C5B5", "core"], ["Cornflower Blue", "#6A93D8", "core"], ["Warm Violet", "#9B6FD1", "core"],
+      ["Poppy Red", "#E8402F", "accent"], ["Marigold", "#F6A21E", "accent"], ["Golden Bronze", "#CD7F32", "accent"], ["Clear Green", "#18A558", "accent"], ["Aqua", "#00C2C7", "accent"], ["Warm Pink", "#F27C9B", "accent"],
+      ["Black", "#111111", "avoid"], ["Icy Gray", "#D9DEE5", "avoid"], ["Dusty Mauve", "#A78A98", "avoid"], ["Cool Burgundy", "#5E1A33", "avoid"]
+    ],
+    "bright-spring": [
+      ["Bright Ivory", "#FFFBEF", "neutral"], ["Light Warm Gray", "#C8C2B8", "neutral"], ["Camel", "#C39A68", "neutral"], ["Chocolate", "#5A3A22", "neutral"], ["Warm Charcoal", "#3D3A36", "neutral"], ["Navy", "#1F3A6B", "neutral"],
+      ["Hot Coral", "#FF5E4D", "core"], ["Poppy Red", "#F3322C", "core"], ["Watermelon", "#FC6C85", "core"], ["Hot Pink", "#FF4F9A", "core"], ["Bright Orange", "#FF7A1A", "core"], ["Lemon Yellow", "#FFE135", "core"], ["Bright Green", "#33C24D", "core"], ["Emerald Green", "#00A86B", "core"], ["Turquoise", "#00C4B3", "core"], ["Bright Aqua", "#00BFE0", "core"], ["Clear Royal Blue", "#2F5BEA", "core"], ["Bright Violet", "#8A4FFF", "core"],
+      ["Electric Lime", "#B4E33D", "accent"], ["Tangerine", "#FF8C00", "accent"], ["Sunflower", "#FFC20E", "accent"], ["Fuchsia Rose", "#F23A84", "accent"], ["Clear Teal", "#00989A", "accent"], ["Peacock Blue", "#0084B4", "accent"],
+      ["Dusty Rose", "#C9A0A0", "avoid"], ["Muted Olive", "#8A8A5C", "avoid"], ["Mushroom Gray", "#A39C91", "avoid"], ["Heathered Beige", "#CDBFAE", "avoid"]
+    ],
+    "light-summer": [
+      ["Soft White", "#F7F5F0", "neutral"], ["Light Cool Gray", "#C6CAD0", "neutral"], ["Rose Beige", "#D8C2B8", "neutral"], ["Dove Gray", "#A9AAB0", "neutral"], ["Rose Brown", "#9C7F7A", "neutral"], ["Soft Navy", "#4C5F86", "neutral"],
+      ["Powder Pink", "#F2C1CF", "core"], ["Rose Pink", "#E89AB4", "core"], ["Soft Raspberry", "#D8789E", "core"], ["Light Orchid", "#D9A6D6", "core"], ["Lavender", "#C4B5E0", "core"], ["Periwinkle", "#A3A9E0", "core"], ["Cornflower", "#7FA1D9", "core"], ["Sky Blue", "#8FB8DE", "core"], ["Powder Blue", "#B0CFE8", "core"], ["Aqua Mist", "#A6DCD8", "core"], ["Mint Blue", "#9FD8C9", "core"], ["Soft Teal", "#6FAEB0", "core"],
+      ["Cool Pink", "#F08AB0", "accent"], ["Soft Fuchsia", "#D86FA8", "accent"], ["Light Plum", "#A8789F", "accent"], ["Blue Iris", "#6C7BC8", "accent"], ["Seafoam", "#7CCBB8", "accent"], ["Light Lemon", "#F4EEA4", "accent"],
+      ["Black", "#111111", "avoid"], ["Orange", "#F28C28", "avoid"], ["Mustard", "#C9A227", "avoid"], ["Rust", "#A0451F", "avoid"]
+    ],
+    "true-summer": [
+      ["Soft White", "#F4F3F0", "neutral"], ["Rose Beige", "#CDB4AA", "neutral"], ["Cool Gray", "#8E939B", "neutral"], ["Cocoa", "#7A6460", "neutral"], ["Blue Gray", "#4E5867", "neutral"], ["Navy", "#2E3F66", "neutral"],
+      ["Rose Pink", "#D77A9B", "core"], ["Raspberry", "#B83D6E", "core"], ["Soft Cherry", "#B2384F", "core"], ["Mauve", "#B48BA5", "core"], ["Plum", "#7F4870", "core"], ["Lavender", "#A99BD3", "core"], ["Periwinkle", "#8592D3", "core"], ["Powder Blue", "#A9C5E2", "core"], ["Medium Blue", "#4F7CC0", "core"], ["Cadet Blue", "#5F8CA8", "core"], ["Teal Blue", "#3D8A94", "core"], ["Blue Green", "#4A9A8C", "core"],
+      ["Cool Fuchsia", "#C4468E", "accent"], ["Berry", "#8E2E5E", "accent"], ["Orchid", "#B567A8", "accent"], ["Soft Sapphire", "#3B5BA9", "accent"], ["Cool Emerald", "#2E8B72", "accent"], ["Light Lemon", "#EEE89A", "accent"],
+      ["Orange", "#F57C00", "avoid"], ["Golden Yellow", "#F5B800", "avoid"], ["Camel", "#C19A6B", "avoid"], ["Rust", "#A0451F", "avoid"]
+    ],
+    "soft-summer": [
+      ["Soft White", "#EFEDE8", "neutral"], ["Mushroom Gray", "#A39C94", "neutral"], ["Taupe Gray", "#8B827C", "neutral"], ["Rose Brown", "#8C6F6B", "neutral"], ["Cool Charcoal", "#4D4F55", "neutral"], ["Slate Navy", "#3E4A61", "neutral"],
+      ["Dusty Rose", "#C2919A", "core"], ["Mauve", "#A9858E", "core"], ["Soft Raspberry", "#A85C77", "core"], ["Plum Gray", "#7D6077", "core"], ["Lavender Gray", "#A59FBF", "core"], ["Dusty Blue", "#7E98B5", "core"], ["Slate Blue", "#6A7FA3", "core"], ["Steel Blue", "#6E8CA0", "core"], ["Soft Teal", "#5E9593", "core"], ["Spruce Teal", "#4F7F80", "core"], ["Seafoam Gray", "#8EB2A8", "core"], ["Gray Sage", "#95A39A", "core"],
+      ["Rosewood", "#9E5F6B", "accent"], ["Berry Smoke", "#874A63", "accent"], ["Cocoa Rose", "#9A7272", "accent"], ["Dusty Lilac", "#B7A3C4", "accent"], ["Cadet Blue", "#5F8CA8", "accent"], ["Soft Jade", "#5E9C84", "accent"],
+      ["Black", "#111111", "avoid"], ["Bright Orange", "#FF7A1A", "avoid"], ["Hot Pink", "#FF4F9A", "avoid"], ["Electric Blue", "#1F51FF", "avoid"]
+    ],
+    "soft-autumn": [
+      ["Oatmeal", "#E3D5BF", "neutral"], ["Mushroom", "#B5A691", "neutral"], ["Warm Taupe", "#A08C76", "neutral"], ["Camel", "#B8956A", "neutral"], ["Olive Gray", "#7F7A62", "neutral"], ["Coffee", "#6F5543", "neutral"],
+      ["Peach Beige", "#E0AE8F", "core"], ["Muted Coral", "#D4886F", "core"], ["Soft Terracotta", "#C47A5E", "core"], ["Warm Rose", "#C48A82", "core"], ["Golden Wheat", "#D6B97C", "core"], ["Soft Mustard", "#C9A55A", "core"], ["Bronze", "#9C7442", "core"], ["Sage", "#A3AE8A", "core"], ["Moss Green", "#8A9165", "core"], ["Olive", "#7D7A48", "core"], ["Soft Jade", "#6E9C88", "core"], ["Soft Teal", "#5F8E86", "core"],
+      ["Cinnamon", "#A9653F", "accent"], ["Brick Rose", "#A65D57", "accent"], ["Muted Marigold", "#D19B4A", "accent"], ["Avocado", "#8A8F47", "accent"], ["Warm Teal", "#4F7F7A", "accent"], ["Muted Petrol", "#4D6E73", "accent"],
+      ["Black", "#111111", "avoid"], ["Pure White", "#FFFFFF", "avoid"], ["Fuchsia", "#E0218A", "avoid"], ["Icy Blue", "#CFE6F5", "avoid"]
+    ],
+    "true-autumn": [
+      ["Cream", "#F2E6CC", "neutral"], ["Warm Khaki", "#A89A6A", "neutral"], ["Camel", "#B8864B", "neutral"], ["Olive", "#6B6B2E", "neutral"], ["Chocolate", "#5B3A21", "neutral"], ["Dark Brown", "#4A3020", "neutral"],
+      ["Rust", "#B7410E", "core"], ["Burnt Orange", "#CC5500", "core"], ["Pumpkin", "#D2691E", "core"], ["Terracotta", "#C1593C", "core"], ["Brick Red", "#A3352B", "core"], ["Mustard", "#D4A017", "core"], ["Gold", "#C9A227", "core"], ["Bronze", "#A97142", "core"], ["Moss", "#6E7B2F", "core"], ["Forest Green", "#355E3B", "core"], ["Warm Teal", "#2F7F7A", "core"], ["Petrol Blue", "#2C5F6F", "core"],
+      ["Copper", "#B87333", "accent"], ["Tomato Red", "#D14A2C", "accent"], ["Golden Ochre", "#CC8E35", "accent"], ["Olive Green", "#708238", "accent"], ["Jade", "#3D8B6E", "accent"], ["Warm Plum", "#6E3B47", "accent"],
+      ["Black", "#111111", "avoid"], ["Icy Pink", "#F5D5E3", "avoid"], ["Cool Lavender", "#C4B5E0", "avoid"], ["Cool Royal Blue", "#2047C8", "avoid"]
+    ],
+    "deep-autumn": [
+      ["Warm Ivory", "#F1E5CE", "neutral"], ["Camel", "#A97C50", "neutral"], ["Olive Brown", "#5A5232", "neutral"], ["Charcoal Brown", "#3E3833", "neutral"], ["Dark Chocolate", "#4B2E22", "neutral"], ["Espresso", "#3B2A20", "neutral"],
+      ["Tomato Red", "#C23B22", "core"], ["Brick Red", "#9E2F25", "core"], ["Oxblood", "#6E1F23", "core"], ["Rust", "#A0441B", "core"], ["Burnt Orange", "#C2571A", "core"], ["Mustard", "#C99A1F", "core"], ["Bronze", "#8C6A2F", "core"], ["Deep Olive", "#4E5A24", "core"], ["Forest Green", "#2E4E33", "core"], ["Deep Teal", "#1C5C5A", "core"], ["Petrol", "#23485A", "core"], ["Aubergine", "#4C2540", "core"],
+      ["Copper", "#B0652E", "accent"], ["Pumpkin", "#D07A22", "accent"], ["Saffron", "#E3A329", "accent"], ["Golden Ochre", "#C08A2B", "accent"], ["Pine Green", "#1F5E4A", "accent"], ["Dark Turquoise", "#12706F", "accent"],
+      ["Pastel Pink", "#F7C8D8", "avoid"], ["Powder Blue", "#B0CFE8", "avoid"], ["Icy Gray", "#D9DEE5", "avoid"], ["Lavender", "#C4B5E0", "avoid"]
+    ],
+    "deep-winter": [
+      ["Pure White", "#FFFFFF", "neutral"], ["Cool Taupe", "#6F655F", "neutral"], ["Graphite", "#4A4C52", "neutral"], ["Charcoal", "#333438", "neutral"], ["Dark Navy", "#1B2440", "neutral"], ["Black", "#121212", "neutral"],
+      ["True Red", "#C8102E", "core"], ["Burgundy", "#800020", "core"], ["Berry", "#8E1D4C", "core"], ["Deep Fuchsia", "#A3195B", "core"], ["Deep Plum", "#5B1E4F", "core"], ["Royal Purple", "#5B2C83", "core"], ["Midnight Blue", "#191970", "core"], ["Sapphire", "#0F52BA", "core"], ["Royal Blue", "#234AA8", "core"], ["Deep Teal", "#005F64", "core"], ["Emerald", "#00785A", "core"], ["Pine Green", "#01523F", "core"],
+      ["Cobalt", "#0047AB", "accent"], ["Shocking Pink", "#E0218A", "accent"], ["Icy Pink", "#F4D9E6", "accent"], ["Icy Blue", "#D6E8F5", "accent"], ["Icy Mint", "#D5F0E5", "accent"], ["Lemon Ice", "#F7F4C8", "accent"],
+      ["Orange", "#F28C28", "avoid"], ["Camel", "#C19A6B", "avoid"], ["Peach", "#FFCBA4", "avoid"], ["Mustard", "#C9A227", "avoid"]
+    ],
+    "true-winter": [
+      ["Pure White", "#FFFFFF", "neutral"], ["Silver Gray", "#C0C4CC", "neutral"], ["Cool Gray", "#8A8F99", "neutral"], ["Charcoal", "#36383D", "neutral"], ["Navy", "#1A2A5A", "neutral"], ["Black", "#0F0F0F", "neutral"],
+      ["Blue Red", "#CC0033", "core"], ["Burgundy", "#7B1034", "core"], ["Raspberry", "#C2185B", "core"], ["Magenta", "#C8007A", "core"], ["Fuchsia", "#E0218A", "core"], ["Royal Purple", "#6A2C91", "core"], ["Royal Blue", "#1F48C5", "core"], ["Cobalt", "#0047AB", "core"], ["True Blue", "#0067C5", "core"], ["Cool Turquoise", "#00A3AD", "core"], ["Emerald", "#009473", "core"], ["Pine Green", "#01796F", "core"],
+      ["Hot Pink", "#FF3E9A", "accent"], ["Icy Pink", "#F6DCE8", "accent"], ["Icy Lavender", "#E3DDF2", "accent"], ["Icy Blue", "#DCEBF7", "accent"], ["Icy Mint", "#DDF3EA", "accent"], ["Lemon Ice", "#F8F5C6", "accent"],
+      ["Camel", "#C19A6B", "avoid"], ["Orange", "#F57C00", "avoid"], ["Olive", "#7D7A48", "avoid"], ["Dusty Peach", "#D9A88F", "avoid"]
+    ],
+    "bright-winter": [
+      ["Pure White", "#FFFFFF", "neutral"], ["Cool Gray", "#8C9099", "neutral"], ["Steel Gray", "#5B616B", "neutral"], ["Charcoal", "#333438", "neutral"], ["Navy", "#142A5C", "neutral"], ["Black", "#101010", "neutral"],
+      ["True Red", "#E0102E", "core"], ["Bright Raspberry", "#D1105A", "core"], ["Hot Pink", "#FF2E93", "core"], ["Fuchsia", "#E4007C", "core"], ["Violet", "#7F3FBF", "core"], ["Electric Blue", "#1F51FF", "core"], ["Cobalt", "#0047AB", "core"], ["Bright Turquoise", "#00C1C9", "core"], ["Bright Teal", "#008C95", "core"], ["Emerald", "#009B77", "core"], ["Clear Green", "#00A651", "core"], ["Lemon Yellow", "#FFF44F", "core"],
+      ["Watermelon", "#FC4C6E", "accent"], ["Deep Purple", "#5A1E8C", "accent"], ["Icy Pink", "#F7D9E8", "accent"], ["Icy Violet", "#E5DCF5", "accent"], ["Icy Blue", "#D9ECFA", "accent"], ["Mint Ice", "#D6F5EA", "accent"],
+      ["Dusty Rose", "#C9A0A0", "avoid"], ["Camel", "#C19A6B", "avoid"], ["Mustard", "#C9A227", "avoid"], ["Muted Olive", "#8A8A5C", "avoid"]
+    ]
+  },
+  "questions": [
+    { "key": "hair_now", "text": "What is your natural hair color today, without dye?", "help": "Look at your roots in daylight. If you are gray or always color your hair, choose \"Not sure\".", "type": "choice", "dimension": "depth", "weight": 1.0, "answers": [
+      ["light_ash", "Light ash or platinum blonde", {"warmth": -0.4, "depth": -0.9}, ["#D8D2C2"]],
+      ["golden_blonde", "Golden or strawberry blonde", {"warmth": 0.7, "depth": -0.7}, ["#D9B36C"]],
+      ["dark_blonde", "Dark ash blonde or light ash brown", {"warmth": -0.5, "depth": -0.3, "chroma": -0.4}, ["#A08C70"]],
+      ["warm_light_brown", "Light or medium golden brown", {"warmth": 0.5, "depth": -0.1, "chroma": -0.2}, ["#9A6B3F"]],
+      ["red", "Red, copper or auburn", {"warmth": 1.0, "depth": 0.0, "chroma": 0.2}, ["#A4502A"]],
+      ["ash_brown", "Medium to dark ash brown", {"warmth": -0.4, "depth": 0.4, "chroma": -0.2}, ["#5E5048"]],
+      ["chestnut", "Dark chestnut or warm dark brown", {"warmth": 0.5, "depth": 0.6}, ["#5B3420"]],
+      ["black", "Very dark brown or black", {"warmth": -0.2, "depth": 1.0}, ["#1E1A18"]],
+      ["unsure", "Not sure, gray or always colored", {}, []]
+    ] },
+    { "key": "hair_child", "text": "What was your hair color as a child?", "help": "Childhood color often shows your natural lightness and warmth before it darkened.", "type": "choice", "dimension": "depth", "weight": 0.6, "answers": [
+      ["very_light", "Very light or white blonde", {"depth": -0.8}, ["#EDE3C8"]],
+      ["golden", "Golden blonde", {"warmth": 0.6, "depth": -0.6}, ["#DDB765"]],
+      ["ash", "Ash blonde or light brown", {"warmth": -0.4, "depth": -0.4}, ["#B3A285"]],
+      ["red", "Red or strawberry", {"warmth": 0.9, "depth": -0.2}, ["#C0643A"]],
+      ["medium_brown", "Medium brown", {"depth": 0.2}, ["#7A5A40"]],
+      ["dark", "Dark brown or black", {"depth": 0.8}, ["#2B211C"]],
+      ["unsure", "I don't remember", {}, []]
+    ] },
+    { "key": "eye_color", "text": "Which best describes your eye color?", "help": "Check in daylight, close to a window.", "type": "choice", "dimension": "chroma", "weight": 1.0, "answers": [
+      ["light_blue", "Light blue or gray-blue", {"warmth": -0.4, "depth": -0.6}, ["#8FA9C2"]],
+      ["bright_blue", "Bright, clear blue or turquoise", {"warmth": -0.2, "depth": -0.4, "chroma": 0.6}, ["#3D8FD1"]],
+      ["green", "Green or green with gold flecks", {"warmth": 0.4, "depth": -0.1}, ["#6E8B4E"]],
+      ["soft_hazel", "Soft hazel, gray-green or blended", {"warmth": 0.1, "chroma": -0.6}, ["#8A8A6A"]],
+      ["warm_hazel", "Warm hazel, topaz or golden brown", {"warmth": 0.6, "depth": 0.2}, ["#9A6B2F"]],
+      ["brown", "Medium to dark brown", {"depth": 0.6}, ["#5A3A22"]],
+      ["very_dark", "Very dark brown, almost black", {"warmth": -0.1, "depth": 0.9, "contrast": 0.3}, ["#2A1C16"]],
+      ["unsure", "Not sure", {}, []]
+    ] },
+    { "key": "eye_clarity", "text": "How do your eyes look up close?", "help": "Compare the iris with the whites of your eyes.", "type": "choice", "dimension": "chroma", "weight": 0.8, "answers": [
+      ["clear", "Clear and sparkling, with a crisp edge", {"chroma": 0.9, "contrast": 0.4}, []],
+      ["somewhat", "Fairly clear", {"chroma": 0.3}, []],
+      ["soft", "Soft, smoky or blended", {"chroma": -0.8, "contrast": -0.3}, []],
+      ["unsure", "Not sure", {}, []]
+    ] },
+    { "key": "undertone", "text": "What cast does your skin have, especially on the jaw and neck?", "help": "Undertone is the color under the surface, not how light or dark you are. Skin of every depth can be warm, cool or neutral.", "type": "choice", "dimension": "warmth", "weight": 1.0, "answers": [
+      ["cool", "Pink, rosy or bluish", {"warmth": -0.8}, ["#E8B9B5"]],
+      ["warm", "Peach, golden or yellow", {"warmth": 0.8}, ["#E2B27F"]],
+      ["olive", "Olive (greenish or gray-gold)", {"warmth": 0.1, "chroma": -0.3}, ["#B59B6E"]],
+      ["neutral", "Mixed, neither clearly warm nor cool", {"warmth": 0.0}, ["#D3AE92"]],
+      ["unsure", "Not sure", {}, []]
+    ] },
+    { "key": "jewelry", "text": "Which metal makes your skin look clearer?", "help": "Hold gold and silver near your face in daylight and look at your skin, not the jewelry.", "type": "choice", "dimension": "warmth", "weight": 0.9, "answers": [
+      ["gold", "Yellow gold", {"warmth": 0.8}, ["#D4AF37"]],
+      ["silver", "Silver or platinum", {"warmth": -0.8}, ["#C0C4CC"]],
+      ["rose_gold", "Rose gold", {"warmth": 0.1, "chroma": -0.3}, ["#C9917A"]],
+      ["both", "Both look the same on me", {"warmth": 0.0}, ["#D4AF37", "#C0C4CC"]],
+      ["unsure", "Not sure", {}, []]
+    ] },
+    { "key": "sun", "text": "What does your skin usually do in the sun?", "help": "Think of your unprotected skin after the first day of summer.", "type": "choice", "dimension": "warmth", "weight": 0.6, "answers": [
+      ["burn_pink", "Burns easily and turns pink, rarely tans", {"warmth": -0.5, "depth": -0.5}, []],
+      ["burn_then_tan", "Burns first, then tans to golden", {"warmth": 0.4, "depth": -0.2}, []],
+      ["tan_golden", "Tans easily to golden or bronze", {"warmth": 0.6, "depth": 0.4}, []],
+      ["tan_deep", "Tans deeply and rarely burns", {"depth": 0.8}, []],
+      ["unsure", "Not sure", {}, []]
+    ] },
+    { "key": "white", "text": "Which white looks better next to your face?", "help": "Try a white shirt and a cream one, without makeup, in daylight.", "type": "choice", "dimension": "warmth", "weight": 0.9, "answers": [
+      ["ivory", "Ivory or cream", {"warmth": 0.8, "chroma": -0.2}, ["#FFF3D6"]],
+      ["pure", "Pure, bright white", {"warmth": -0.6, "chroma": 0.5, "contrast": 0.5}, ["#FFFFFF"]],
+      ["soft", "Soft white (off-white, not yellow)", {"warmth": -0.3, "chroma": -0.4}, ["#EFEDE8"]],
+      ["unsure", "Not sure", {}, []]
+    ] },
+    { "key": "brightness", "text": "Which group of colors makes you look most alive?", "help": "Choose the group that makes your skin look even and your eyes look clear, not the one you like most.", "type": "choice", "dimension": "chroma", "weight": 1.0, "answers": [
+      ["bright", "Bright and saturated", {"chroma": 0.9}, ["#E4007C", "#1F51FF", "#00A86B"]],
+      ["medium", "Medium and clear", {"chroma": 0.4}, ["#C8102E", "#30C5B5", "#4F7CC0"]],
+      ["rich", "Rich and toned-down", {"chroma": -0.4}, ["#8E2E5E", "#2F7F7A", "#6E7B2F"]],
+      ["soft", "Soft and dusty", {"chroma": -0.9}, ["#C2919A", "#95A39A", "#6A7FA3"]],
+      ["unsure", "Not sure", {}, []]
+    ] },
+    { "key": "lightness", "text": "Which depth of color suits you best near your face?", "help": "Think of the colors people compliment you in.", "type": "choice", "dimension": "depth", "weight": 1.0, "answers": [
+      ["light", "Light and pastel", {"depth": -0.9, "contrast": -0.4}, ["#F2C1CF", "#B0CFE8", "#FBE38E"]],
+      ["medium", "Medium", {"depth": 0.0}, ["#D77A9B", "#5F8CA8", "#A3AE8A"]],
+      ["deep", "Deep and rich", {"depth": 0.9}, ["#800020", "#2E4E33", "#1B2440"]],
+      ["unsure", "Not sure", {}, []]
+    ] },
+    { "key": "black", "text": "How do you look in black near your face?", "help": "", "type": "choice", "dimension": "contrast", "weight": 0.9, "answers": [
+      ["striking", "Striking: my face looks clear and defined", {"contrast": 0.8, "depth": 0.5, "chroma": 0.3}, ["#111111"]],
+      ["fine", "Fine, but charcoal or navy is easier", {"contrast": 0.0, "depth": 0.1, "chroma": -0.2}, ["#36383D"]],
+      ["harsh", "Harsh: I look tired or washed out", {"contrast": -0.7, "depth": -0.4}, ["#111111"]],
+      ["unsure", "Not sure", {}, []]
+    ] },
+    { "key": "beige", "text": "How does warm beige or camel look near your face?", "help": "", "type": "choice", "dimension": "warmth", "weight": 0.8, "answers": [
+      ["glow", "It makes my skin glow", {"warmth": 0.8, "chroma": -0.3}, ["#C19A6B"]],
+      ["ok", "It is fine, nothing special", {"warmth": 0.0}, ["#C19A6B"]],
+      ["sallow", "It makes me look sallow or gray", {"warmth": -0.7}, ["#C19A6B"]],
+      ["unsure", "Not sure", {}, []]
+    ] },
+    { "key": "pink_coral", "text": "Cool pink or warm coral: which flatters you more?", "help": "Think of a lipstick, blush or top in each color.", "type": "choice", "dimension": "warmth", "weight": 0.9, "answers": [
+      ["pink", "Cool pink", {"warmth": -0.8}, ["#D77A9B"]],
+      ["coral", "Warm coral", {"warmth": 0.8}, ["#FF7F50"]],
+      ["both", "Both work about the same", {"warmth": 0.0}, ["#D77A9B", "#FF7F50"]],
+      ["unsure", "Not sure", {}, []]
+    ] },
+    { "key": "navy_brown", "text": "Navy or warm brown: which looks better as your basic color?", "help": "", "type": "choice", "dimension": "warmth", "weight": 0.7, "answers": [
+      ["navy", "Navy", {"warmth": -0.6}, ["#1F3A6B"]],
+      ["brown", "Warm chocolate brown", {"warmth": 0.6}, ["#5B3A21"]],
+      ["both", "No real difference", {"warmth": 0.0}, ["#1F3A6B", "#5B3A21"]],
+      ["unsure", "Not sure", {}, []]
+    ] },
+    { "key": "contrast", "text": "How much contrast is there between your hair, skin and eyes?", "help": "Take a black-and-white photo of your face. Strong differences between light and dark mean high contrast.", "type": "choice", "dimension": "contrast", "weight": 1.0, "answers": [
+      ["high", "High: dark hair or eyes with light skin, or very defined features", {"contrast": 0.9}, ["#111111", "#F5E6DA"]],
+      ["medium", "Medium", {"contrast": 0.2}, ["#6F5543", "#E0BFA5"]],
+      ["low", "Low: hair, skin and eyes blend together", {"contrast": -0.8}, ["#B5A691", "#E3D5BF"]],
+      ["unsure", "Not sure", {}, []]
+    ] }
+  ]
+}

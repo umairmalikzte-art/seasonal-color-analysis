@@ -1,0 +1,14 @@
+{
+  "name": "seasonal-color-analysis",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Seasonal Color Analysis – WordPress site with the Seasonal Color Toolkit plugin",
+  "scripts": {
+    "start": "wp-playground-cli server --mount=./wp-content/plugins/seasonal-color-toolkit:/wordpress/wp-content/plugins/seasonal-color-toolkit --mount=./wp-content/themes/seasonal-color:/wordpress/wp-content/themes/seasonal-color --mount=./setup:/wordpress/sca-setup --blueprint=./blueprint.json --port=9500",
+    "test": "node --test tests/engine.test.js",
+    "calibrate": "node tools/calibrate.js"
+  },
+  "devDependencies": {
+    "@wp-playground/cli": "^3.1.65"
+  }
+}

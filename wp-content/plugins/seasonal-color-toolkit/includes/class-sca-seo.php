@@ -331,6 +331,17 @@ class SCA_SEO {
 		// Page-specific types.
 		if ( is_front_page() ) {
 			$webpage['about']    = self::thing( 'color_analysis' );
+			$graph[]             = array(
+				'@type'               => 'WebApplication',
+				'@id'                 => $url . '#app',
+				'name'                => 'AI Color Analysis',
+				'url'                 => $url . '#ai-color-analysis',
+				'applicationCategory' => 'LifestyleApplication',
+				'operatingSystem'     => 'Any (web browser)',
+				'isAccessibleForFree' => true,
+				'offers'              => array( '@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'USD' ),
+				'publisher'           => array( '@id' => $org_id ),
+			);
 			$webpage['mentions'] = array( self::thing( 'munsell' ), self::thing( 'hue' ), self::thing( 'lightness' ), self::thing( 'chroma' ), self::thing( 'contrast' ), self::thing( 'skin' ) );
 		} elseif ( 'ai-color-analysis' === $slug || 'skin-tone-test' === $slug ) {
 			$graph[] = array(

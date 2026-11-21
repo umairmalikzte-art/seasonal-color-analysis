@@ -20,11 +20,11 @@ Playground. It has not been deployed.
 | 11 | Admin can edit questions and weights | ✅ | Quiz Questions, Quiz Answers, Scoring Settings, with a live preview on the dashboard |
 | 12 | Mobile layout works | ✅ | No horizontal overflow at 390 and 360 px |
 | 13 | No critical JS or PHP errors | ✅ | No console errors in the Chrome run, no PHP notices on 22 URLs |
-| 14 | SEO metadata works | ⚠️ partly | Unique titles, one H1, meta description fallback, breadcrumbs. **The SEO plugin (Rank Math or Yoast) and schema are not installed yet** |
+| 14 | SEO metadata works | ✅ | Built into the plugin (titles, meta, Open Graph, JSON-LD, breadcrumbs). It switches off automatically if Rank Math or Yoast is installed. Audit of 22 URLs: no issues. See SEO-STRATEGY.md |
 | 15 | Sitemap is accessible | ✅ | `/wp-sitemap.xml` (WordPress core) |
 | 16 | HTTPS active on deployment | ⏳ | At deployment |
 | 17 | Backups configured | ⏳ | At deployment |
-| 18 | No copied or unlicensed assets | ✅ | No images yet. Palettes and graphics are original, drawn with CSS, SVG and canvas |
+| 18 | No copied or unlicensed assets | ✅ | All graphics are generated from our own palette data (`npm run build:images`). Trend names link to their sources |
 
 ## Lighthouse (local, mobile)
 
@@ -55,11 +55,15 @@ the same machine that was running the server.
   comparison tool, one written comparison, two guides, About and Privacy.
 - Admin: all 8 sections in PRD 14.
 
+## Added after P0
+
+- **Palette generator (PRD tool C and more):** five harmonies, trend colors mapped to each season, a "check my colors" tab and an admin Trends page.
+- **SEO, AEO and performance:** see SEO-STRATEGY.md. The homepage hero starts the quiz with plain links.
+
 ## Next
 
-1. **P1 SEO:** install one SEO plugin (Rank Math or Yoast), add titles,
-   descriptions and the schema plan from KEYWORD-RESEARCH.md §6, then turn
-   off the plugin's own breadcrumbs or Yoast's.
+1. **Optional:** install Rank Math or Yoast if the owner prefers one. The
+   plugin's SEO module then switches off by itself.
 2. **P1 content:** 4 more comparisons and 4 styling guides (see the URL map
    in KEYWORD-RESEARCH.md §4), bringing the total to 30 pages.
 3. Original images: 12 palette graphics (they can come from the PNG export),

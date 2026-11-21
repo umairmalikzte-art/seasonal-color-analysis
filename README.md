@@ -10,6 +10,8 @@ tool. Target markets: US, UK, Canada and Australia.
   comparison and admin logic. It works with any theme.
 - **Keyword research and site structure:** see
   [docs/KEYWORD-RESEARCH.md](docs/KEYWORD-RESEARCH.md).
+- **SEO, AEO, schema, speed and the off-page plan:** see
+  [docs/SEO-STRATEGY.md](docs/SEO-STRATEGY.md).
 - **PRD status:** see [docs/STATUS.md](docs/STATUS.md).
 
 ## Run it locally (free, no PHP or MySQL needed)
@@ -19,8 +21,10 @@ Requirements: Node.js 20 or newer.
 ```bash
 npm install        # first time only
 npm start          # WordPress at http://127.0.0.1:9500 (admin / password)
-npm test           # scoring engine tests (23)
+npm test           # engine and color tests (38)
 npm run calibrate  # calibration report for human review
+npm run lint:php   # PHP syntax check (runs in Playground PHP)
+npm run build      # minified JS + palette images (images need puppeteer-core, see tools/build-images.js)
 ```
 
 `npm start` runs [WordPress Playground](https://wordpress.github.io/wordpress-playground/).
@@ -48,12 +52,16 @@ wp-content/plugins/seasonal-color-toolkit/
     class-sca-shortcodes.php     [sca_quiz], [sca_palette], [sca_compare] …, breadcrumbs
     class-sca-assets.php         scripts only on pages that use them
     class-sca-starter-content.php  pages and guides (never overwrites)
+    class-sca-seo.php            titles, meta, Open Graph, JSON-LD, robots, sitemap, llms.txt
     starter/seasons.php          editorial text for the 12 season guides
     admin/class-sca-admin.php    dashboard, seasons, palettes, questions,
                                  answers, scoring, comparisons, settings
   assets/js/sca-engine.js        scoring engine (browser + Node, unit tested)
   assets/js/sca-quiz.js          quiz app (answers never leave the browser)
   assets/js/sca-palette.js       copy, copy all, PNG download, explorer tabs
+  assets/js/sca-color.js         OKLab color math + palette generator (unit tested)
+  assets/js/sca-generator.js     generator, trend panel and color checker UI
+  assets/img/                    generated OG images and palette graphics
   assets/css/sca.css             component styles (themeable with --sca-* variables)
 ```
 

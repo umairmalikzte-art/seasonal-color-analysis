@@ -20,6 +20,8 @@ class SCA_Shortcodes {
 		$codes = array(
 			'sca_quiz'             => 'quiz',
 			'sca_quiz_preview'     => 'quiz_preview',
+			'sca_quiz_start'       => 'quiz_start',
+			'sca_season_image'     => 'season_image',
 			'sca_season_families'  => 'season_families',
 			'sca_popular_palettes' => 'popular_palettes',
 			'sca_season_profile'   => 'season_profile',
@@ -37,22 +39,8 @@ class SCA_Shortcodes {
 		}
 		add_filter( 'the_content', array( __CLASS__, 'breadcrumbs' ), 5 );
 		add_filter( 'wp_robots', array( __CLASS__, 'robots' ) );
-		add_action( 'wp_head', array( __CLASS__, 'meta_description' ), 1 );
 	}
 
-	/**
-	 * Fallback meta description from the excerpt. Skipped when Yoast SEO or
-	 * Rank Math is active, because they own this tag (PRD 10).
-	 */
-	public static function meta_description() {
-		if ( defined( 'WPSEO_VERSION' ) || class_exists( 'RankMath' ) || ! is_singular() ) {
-			return;
-		}
-		$post = get_queried_object();
-		if ( $post instanceof WP_Post && '' !== $post->post_excerpt ) {
-			echo '<meta name="description" content="' . esc_attr( wp_strip_all_tags( $post->post_excerpt ) ) . '">' . "\n";
-		}
-	}
 
 	/**
 	 * Season from the shortcode attribute or from the current season post.
@@ -75,6 +63,37 @@ class SCA_Shortcodes {
 		$html .= '<noscript><p class="sca-notice">' . esc_html__( 'The quiz needs JavaScript. You can still browse all 12 season palettes.', 'seasonal-color-toolkit' ) . ' <a href="' . esc_url( SCA_Repository::page_url( '12-color-seasons' ) ) . '">' . esc_html__( 'See the 12 color seasons', 'seasonal-color-toolkit' ) . '</a></p></noscript>';
 		$html .= '<div class="sca-quiz__loading" aria-hidden="true"></div>';
 		$html .= '</div>';
+		return $html;
+	}
+
+	/**
+	 * [sca_quiz_start] The first quiz question as plain links, for the
+	 * homepage hero. Choosing an answer opens the quiz at question 2. The
+	 * answer travels in the URL fragment (#start=), which browsers never send
+	 * to the server, so nothing is logged. No JavaScript is needed here.
+	 */
+	public static function quiz_start() {
+		$questions = SCA_Repository::questions();
+		if ( ! $questions ) {
+			return '';
+		}
+		$q     = $questions[0];
+		$url   = SCA_Repository::page_url( 'seasonal-color-analysis-quiz' );
+		$count = count( $questions );
+		$html  = '<div class="sca-start">';
+		/* translators: %d: number of questions */
+		$html .= '<p class="sca-start__meta"><span class="sca-badge">' . esc_html__( 'Free quiz', 'seasonal-color-toolkit' ) . '</span> ' . esc_html( sprintf( __( '%d questions · about 3 minutes · no photo', 'seasonal-color-toolkit' ), $count ) ) . '</p>';
+		/* translators: %d: number of questions */
+		$html .= '<p class="sca-start__count">' . esc_html( sprintf( __( 'Question 1 of %d', 'seasonal-color-toolkit' ), $count ) ) . '</p>';
+		$html .= '<p class="sca-start__question" id="sca-start-q">' . esc_html( $q['question_text'] ) . '</p>';
+		$html .= '<ul class="sca-start__options" role="list" aria-labelledby="sca-start-q">';
+		foreach ( $q['answers'] as $a ) {
+			$sw    = SCA_Repository::split( $a['swatches'] );
+			$html .= '<li><a href="' . esc_url( $url . '#start=' . $q['question_key'] . ':' . $a['answer_key'] ) . '" rel="nofollow">';
+			$html .= $sw ? '<span class="sca-start__dot" style="background:' . esc_attr( (string) sanitize_hex_color( $sw[0] ) ) . '" aria-hidden="true"></span>' : '<span class="sca-start__dot sca-start__dot--empty" aria-hidden="true"></span>';
+			$html .= '<span>' . esc_html( $a['answer_text'] ) . '</span></a></li>';
+		}
+		$html .= '</ul><p class="sca-start__privacy">' . esc_html__( 'No sign-up or email. Your answers stay on your device.', 'seasonal-color-toolkit' ) . '</p></div>';
 		return $html;
 	}
 
@@ -150,7 +169,33 @@ class SCA_Shortcodes {
 			/* translators: %s: alternative season names */
 			$html .= ' <span class="sca-profile__alt">' . esc_html( sprintf( __( 'Also called %s', 'seasonal-color-toolkit' ), implode( ', ', $alt ) ) ) . '</span>';
 		}
-		$html .= '</p>' . SCA_Render::meters( SCA_Render::season_values( $s ) ) . '</div>';
+		$html .= '</p>' . SCA_Render::meters( SCA_Render::season_values( $s ) );
+
+		// At a glance: short, quotable facts (featured snippets, AI answers).
+		$names = array(
+			'core'    => array(),
+			'neutral' => array(),
+			'avoid'   => array(),
+		);
+		foreach ( SCA_Repository::palette( $s['id'] ) as $c ) {
+			if ( isset( $names[ $c['color_category'] ] ) ) {
+				$names[ $c['color_category'] ][] = $c['color_name'];
+			}
+		}
+		$facts = array(
+			__( 'Family', 'seasonal-color-toolkit' )           => SCA_Render::family_name( $s['season_family'] ),
+			__( 'Signature colors', 'seasonal-color-toolkit' ) => implode( ', ', array_slice( $names['core'], 0, 5 ) ),
+			__( 'Best neutrals', 'seasonal-color-toolkit' )    => implode( ', ', array_slice( $names['neutral'], 0, 5 ) ),
+			__( 'Wear with care', 'seasonal-color-toolkit' )   => implode( ', ', $names['avoid'] ),
+		);
+		/* translators: %s: season */
+		$html .= '<p class="sca-profile__title">' . esc_html( sprintf( __( '%s at a glance', 'seasonal-color-toolkit' ), $s['season_name'] ) ) . '</p><dl class="sca-facts">';
+		foreach ( $facts as $label => $value ) {
+			if ( '' !== $value ) {
+				$html .= '<div><dt>' . esc_html( $label ) . '</dt><dd>' . esc_html( $value ) . '</dd></div>';
+			}
+		}
+		$html .= '</dl></div>';
 		return $html;
 	}
 
@@ -172,6 +217,27 @@ class SCA_Shortcodes {
 		SCA_Assets::enqueue_palette();
 		$cats = array_intersect( SCA_Repository::split( $atts['show'] ), SCA_Repository::CATEGORIES );
 		return SCA_Render::palette( $s, array_values( $cats ), 'yes' === $atts['tools'] );
+	}
+
+	/**
+	 * [sca_season_image season=""] Original palette graphic (WebP, lazy) with
+	 * names and hex codes, for readers who save or pin palettes.
+	 */
+	public static function season_image( $atts ) {
+		$s = self::season_from( (array) $atts );
+		if ( ! $s ) {
+			return '';
+		}
+		$rel = 'assets/img/seasons/' . $s['season_slug'] . '-palette.webp';
+		if ( ! file_exists( SCA_DIR . $rel ) ) {
+			return '';
+		}
+		/* translators: %s: season */
+		$alt  = sprintf( __( '%s color palette: neutrals, core colors and accents with color names and hex codes', 'seasonal-color-toolkit' ), $s['season_name'] );
+		$html = '<figure class="sca-figure"><img src="' . esc_url( SCA_URL . $rel ) . '" width="1200" height="900" loading="lazy" decoding="async" alt="' . esc_attr( $alt ) . '">';
+		/* translators: %s: season */
+		$html .= '<figcaption>' . esc_html( sprintf( __( 'The %s palette as one image. Save it to your phone to use while shopping.', 'seasonal-color-toolkit' ), $s['season_name'] ) ) . '</figcaption></figure>';
+		return $html;
 	}
 
 	/** [sca_season_table] All 12 seasons with their four dimensions. */
@@ -534,7 +600,12 @@ class SCA_Shortcodes {
 				? '<li><a href="' . esc_url( $item[1] ) . '">' . esc_html( $item[0] ) . '</a></li>'
 				: '<li><span aria-current="page">' . esc_html( $item[0] ) . '</span></li>';
 		}
-		return $html . '</ol></nav>' . $content;
+		$html .= '</ol></nav>';
+		if ( 'page' !== $type || in_array( get_post_field( 'post_name' ), array( '12-color-seasons', 'seasonal-color-palette-generator', 'seasonal-color-analysis-quiz' ), true ) ) {
+			/* translators: %s: date */
+			$html .= '<p class="sca-updated">' . sprintf( esc_html__( 'Last updated %s', 'seasonal-color-toolkit' ), '<time datetime="' . esc_attr( get_the_modified_date( 'c' ) ) . '">' . esc_html( get_the_modified_date( 'F j, Y' ) ) . '</time>' ) . '</p>';
+		}
+		return $html . $content;
 	}
 
 	/**

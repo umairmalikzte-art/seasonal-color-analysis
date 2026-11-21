@@ -263,7 +263,28 @@
 		bindResult();
 	}
 
+	// Started from the homepage: #start=questionKey:answerKey (a fragment, never sent to the server).
+	function startFromHash() {
+		var m = /^#start=([a-z0-9_]+):([a-z0-9_]+)$/.exec(location.hash);
+		if (!m) return false;
+		history.replaceState(null, '', location.pathname + location.search);
+		var i = -1;
+		questions.forEach(function (q, n) { if (q.key === m[1]) i = n; });
+		if (i !== 0) return false;
+		var valid = questions[0].answers.some(function (a) { return a.key === m[2]; });
+		if (!valid) return false;
+		state.answers[m[1]] = m[2];
+		state.started = true;
+		state.step = 1;
+		emit('quiz_start');
+		return true;
+	}
+
 	var shared = new URLSearchParams(location.search).get('season');
 	if (shared && seasons[shared]) renderShared(seasons[shared]);
-	else renderQuestion();
+	else {
+		var fromHome = startFromHash();
+		renderQuestion();
+		if (fromHome) focusHeading();
+	}
 })();

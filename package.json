@@ -7,9 +7,13 @@
     "start": "wp-playground-cli server --mount=./wp-content/plugins/seasonal-color-toolkit:/wordpress/wp-content/plugins/seasonal-color-toolkit --mount=./wp-content/themes/seasonal-color:/wordpress/wp-content/themes/seasonal-color --mount=./setup:/wordpress/sca-setup --blueprint=./blueprint.json --port=9500",
     "test": "node --test tests/engine.test.js tests/color.test.js",
     "calibrate": "node tools/calibrate.js",
-    "lint:php": "wp-playground-cli php --mount=./wp-content:/app/wp-content --mount=./setup:/app/setup --mount=./tools:/app/tools -- /app/tools/lint.php"
+    "lint:php": "wp-playground-cli php --mount=./wp-content:/app/wp-content --mount=./setup:/app/setup --mount=./tools:/app/tools -- /app/tools/lint.php",
+    "build:js": "esbuild wp-content/plugins/seasonal-color-toolkit/assets/js/sca-engine.js --minify --target=es2017 --outfile=wp-content/plugins/seasonal-color-toolkit/assets/js/sca-engine.min.js && esbuild wp-content/plugins/seasonal-color-toolkit/assets/js/sca-palette.js --minify --target=es2017 --outfile=wp-content/plugins/seasonal-color-toolkit/assets/js/sca-palette.min.js && esbuild wp-content/plugins/seasonal-color-toolkit/assets/js/sca-color.js --minify --target=es2017 --outfile=wp-content/plugins/seasonal-color-toolkit/assets/js/sca-color.min.js && esbuild wp-content/plugins/seasonal-color-toolkit/assets/js/sca-generator.js --minify --target=es2017 --outfile=wp-content/plugins/seasonal-color-toolkit/assets/js/sca-generator.min.js && esbuild wp-content/plugins/seasonal-color-toolkit/assets/js/sca-quiz.js --minify --target=es2017 --outfile=wp-content/plugins/seasonal-color-toolkit/assets/js/sca-quiz.min.js",
+    "build:images": "node tools/build-images.js",
+    "build": "npm run build:js && npm run build:images"
   },
   "devDependencies": {
-    "@wp-playground/cli": "^3.1.65"
+    "@wp-playground/cli": "^3.1.65",
+    "esbuild": "^0.28.2"
   }
 }

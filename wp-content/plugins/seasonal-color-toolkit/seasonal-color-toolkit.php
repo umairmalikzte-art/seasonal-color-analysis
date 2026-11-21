@@ -27,6 +27,7 @@ require_once SCA_DIR . 'includes/class-sca-render.php';
 require_once SCA_DIR . 'includes/class-sca-shortcodes.php';
 require_once SCA_DIR . 'includes/class-sca-assets.php';
 require_once SCA_DIR . 'includes/class-sca-starter-content.php';
+require_once SCA_DIR . 'includes/class-sca-seo.php';
 
 if ( is_admin() ) {
 	require_once SCA_DIR . 'includes/admin/class-sca-admin.php';
@@ -40,3 +41,4 @@ add_action( 'plugins_loaded', array( 'SCA_Install', 'maybe_upgrade' ) );
 SCA_Post_Types::init();
 SCA_Shortcodes::init();
 SCA_Assets::init();
+SCA_SEO::init();

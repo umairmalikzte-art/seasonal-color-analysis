@@ -21,6 +21,29 @@ class SCA_Assets {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_for_content' ), 20 );
 	}
 
+	/** @var bool Inline CSS already added. */
+	private static $css_done = false;
+
+	/** @return string Minified file when it exists and SCRIPT_DEBUG is off. */
+	private static function file( $rel ) {
+		$min = preg_replace( '/\.js$/', '.min.js', $rel );
+		return ( ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) && file_exists( SCA_DIR . $min ) ) ? $min : $rel;
+	}
+
+	/** Adds the component CSS inline, minified (no render-blocking request). */
+	public static function style() {
+		wp_enqueue_style( 'sca' );
+		if ( self::$css_done ) {
+			return;
+		}
+		self::$css_done = true;
+		$css = (string) file_get_contents( SCA_DIR . 'assets/css/sca.css' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$css = (string) preg_replace( '#/\*.*?\*/#s', '', $css );
+		$css = (string) preg_replace( '/\s+/', ' ', $css );
+		$css = str_replace( array( ' {', '{ ', '; ', ' }', ': ', ', ' ), array( '{', '{', ';', '}', ':', ',' ), $css );
+		wp_add_inline_style( 'sca', trim( $css ) );
+	}
+
 	/** @return string Version string that changes with the file. */
 	private static function ver( $rel ) {
 		$file = SCA_DIR . $rel;
@@ -33,12 +56,12 @@ class SCA_Assets {
 			'strategy'  => 'defer',
 			'in_footer' => true,
 		);
-		wp_register_style( 'sca', SCA_URL . 'assets/css/sca.css', array(), self::ver( 'assets/css/sca.css' ) );
-		wp_register_script( 'sca-engine', SCA_URL . 'assets/js/sca-engine.js', array(), self::ver( 'assets/js/sca-engine.js' ), $defer );
-		wp_register_script( 'sca-palette', SCA_URL . 'assets/js/sca-palette.js', array(), self::ver( 'assets/js/sca-palette.js' ), $defer );
-		wp_register_script( 'sca-color', SCA_URL . 'assets/js/sca-color.js', array(), self::ver( 'assets/js/sca-color.js' ), $defer );
-		wp_register_script( 'sca-generator', SCA_URL . 'assets/js/sca-generator.js', array( 'sca-color', 'sca-palette' ), self::ver( 'assets/js/sca-generator.js' ), $defer );
-		wp_register_script( 'sca-quiz', SCA_URL . 'assets/js/sca-quiz.js', array( 'sca-engine', 'sca-palette' ), self::ver( 'assets/js/sca-quiz.js' ), $defer );
+		wp_register_style( 'sca', false, array(), SCA_VERSION );
+		wp_register_script( 'sca-engine', SCA_URL . self::file( 'assets/js/sca-engine.js' ), array(), self::ver( 'assets/js/sca-engine.js' ), $defer );
+		wp_register_script( 'sca-palette', SCA_URL . self::file( 'assets/js/sca-palette.js' ), array(), self::ver( 'assets/js/sca-palette.js' ), $defer );
+		wp_register_script( 'sca-color', SCA_URL . self::file( 'assets/js/sca-color.js' ), array(), self::ver( 'assets/js/sca-color.js' ), $defer );
+		wp_register_script( 'sca-generator', SCA_URL . self::file( 'assets/js/sca-generator.js' ), array( 'sca-color', 'sca-palette' ), self::ver( 'assets/js/sca-generator.js' ), $defer );
+		wp_register_script( 'sca-quiz', SCA_URL . self::file( 'assets/js/sca-quiz.js' ), array( 'sca-engine', 'sca-palette' ), self::ver( 'assets/js/sca-quiz.js' ), $defer );
 	}
 
 	/**
@@ -54,7 +77,7 @@ class SCA_Assets {
 		if ( false === strpos( $content, '[sca_' ) ) {
 			return;
 		}
-		wp_enqueue_style( 'sca' );
+		self::style();
 		if ( has_shortcode( $content, 'sca_quiz' ) ) {
 			self::enqueue_quiz();
 		}
@@ -70,7 +93,7 @@ class SCA_Assets {
 
 	/** Palette tools: copy, copy all, PNG download, explorer tabs. */
 	public static function enqueue_palette() {
-		wp_enqueue_style( 'sca' );
+		self::style();
 		wp_enqueue_script( 'sca-palette' );
 	}
 

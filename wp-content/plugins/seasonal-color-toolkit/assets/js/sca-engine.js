@@ -183,7 +183,8 @@
 
 	/** Text color (dark or light) that reads best on a swatch. */
 	function inkFor(hex) {
-		return luminance(hex) > 0.36 ? '#222222' : '#ffffff';
+		// Black text when it gives more contrast than white (WCAG), i.e. luminance above ~0.18.
+		return luminance(hex) > 0.179 ? '#222222' : '#ffffff';
 	}
 
 	return {

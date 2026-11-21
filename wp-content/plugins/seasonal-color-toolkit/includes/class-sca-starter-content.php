@@ -95,11 +95,13 @@ class SCA_Starter_Content {
 		$home = self::insert( 'page', 'home', 'Seasonal Color Analysis', self::home(), 'Find the colors that suit you with a free seasonal color analysis quiz, 12 season color palettes with hex codes, and practical styling guides.', 0 );
 		self::insert( 'page', 'seasonal-color-analysis-quiz', 'Free Seasonal Color Analysis Quiz', self::quiz_page(), 'Take a free 15-question seasonal color analysis quiz. No photo, no sign-up. Get your likely season, the closest alternative and your palette.', 1 );
 		self::insert( 'page', '12-color-seasons', 'The 12 Color Seasons', self::seasons_page(), 'The 12 color seasons explained: how each one differs in temperature, depth, chroma and contrast, with every palette and its hex codes.', 2 );
-		self::insert( 'page', 'seasonal-color-palette-generator', 'Seasonal Color Palette Generator', self::generator_page(), 'Generate outfit color combinations from your season\'s palette, see how to wear the 2026 and 2027 trend colors in your season, and check any color against your palette.', 3 );
+		self::insert( 'page', 'seasonal-color-palette-generator', 'Seasonal Color Palette Generator', self::generator_page(), 'Generate outfit color combinations from your season\'s palette, see how to wear the 2026 and 2027 trend colors, and check any color you own.', 3 );
 		self::insert( 'page', 'compare-seasons', 'Compare Seasons', self::compare_page(), 'Compare any two of the 12 color seasons side by side: temperature, depth, chroma, contrast and both palettes.', 3 );
 		self::insert( 'page', 'color-guides', 'Color Guides', self::guides_page(), 'Practical guides to seasonal color analysis: undertones, doing an analysis at home and telling similar seasons apart.', 4 );
 		self::insert( 'page', 'about', 'About', self::about_page(), 'Who is behind this site, how the quiz and palettes were made, and what a free online color analysis can and cannot tell you.', 5 );
 		self::insert( 'page', 'privacy-policy', 'Privacy Policy', self::privacy_page(), 'How this site handles your data: quiz answers stay in your browser and are never stored or sent to analytics.', 6 );
+
+		self::seo_titles();
 
 		$front = $home ? $home : ( get_page_by_path( 'home' ) ? get_page_by_path( 'home' )->ID : 0 );
 		if ( $front && 'page' !== get_option( 'show_on_front' ) ) {
@@ -111,6 +113,36 @@ class SCA_Starter_Content {
 			update_option( 'wp_page_for_privacy_policy', $privacy->ID );
 		}
 		return $front;
+	}
+
+	/** SEO titles (60 characters or fewer, keyword first). Only set when empty. */
+	private static function seo_titles() {
+		$titles = array(
+			'home'                             => 'Seasonal Color Analysis: Free Quiz & 12 Season Palettes',
+			'seasonal-color-analysis-quiz'     => 'Seasonal Color Analysis Quiz: Free, No Photo Needed',
+			'12-color-seasons'                 => 'The 12 Color Seasons Explained, With Every Palette',
+			'seasonal-color-palette-generator' => 'Seasonal Color Palette Generator for Outfits & Trends',
+			'warm-vs-cool-undertone'           => 'Warm vs Cool Undertone: 6 Easy Tests to Tell Yours',
+			'seasonal-color-analysis-guide'    => 'How to Do Seasonal Color Analysis at Home (6 Steps)',
+			'soft-autumn-vs-soft-summer'       => 'Soft Autumn vs Soft Summer: How to Tell the Difference',
+		);
+		foreach ( SCA_Repository::seasons( false ) as $s ) {
+			$titles[ $s['season_slug'] . '-color-palette' ] = $s['season_name'] . ' Color Palette: Hex Codes, Clothes & Makeup';
+		}
+		foreach ( $titles as $slug => $title ) {
+			$found = get_posts(
+				array(
+					'name'        => $slug,
+					'post_type'   => array_merge( array( 'page' ), SCA_Post_Types::TYPES ),
+					'post_status' => 'any',
+					'numberposts' => 1,
+					'fields'      => 'ids',
+				)
+			);
+			if ( $found && '' === (string) get_post_meta( $found[0], '_sca_seo_title', true ) ) {
+				update_post_meta( $found[0], '_sca_seo_title', $title );
+			}
+		}
 	}
 
 	/**
@@ -160,6 +192,7 @@ class SCA_Starter_Content {
 		$out .= self::h( esc_html( $name ) . ' color palette with hex codes' );
 		$out .= self::p( 'These are curated colors for ' . esc_html( $name ) . ', grouped into neutrals, core colors and accents. Select a swatch to copy its hex code, or download the whole palette as an image.' );
 		$out .= self::sc( '[sca_palette season="' . $slug . '"]' );
+		$out .= self::sc( '[sca_season_image season="' . $slug . '"]' );
 		$out .= self::h( esc_html( $name ) . ' characteristics' );
 		$out .= self::p( 'People with ' . esc_html( $name ) . ' coloring often have some of these traits. No single feature decides a season: the overall balance of temperature, depth, chroma and contrast does.' );
 		$out .= self::ul( array_map( 'esc_html', $c['look'] ) );
@@ -209,13 +242,12 @@ class SCA_Starter_Content {
 
 	private static function home() {
 		$quiz = home_url( '/seasonal-color-analysis-quiz/' );
-		$out  = '<!-- wp:group {"className":"sca-hero","layout":{"type":"constrained"}} --><div class="wp-block-group sca-hero">';
+		$out  = '<!-- wp:group {"className":"sca-hero","layout":{"type":"constrained"}} --><div class="wp-block-group sca-hero"><!-- wp:columns {"className":"sca-hero__grid"} --><div class="wp-block-columns sca-hero__grid"><!-- wp:column {"className":"sca-hero__text"} --><div class="wp-block-column sca-hero__text">';
 		$out .= "<!-- wp:heading {\"level\":1} -->\n<h1 class=\"wp-block-heading\">Discover Your Perfect Colors with Seasonal Color Analysis</h1>\n<!-- /wp:heading -->\n\n";
 		$out .= "<!-- wp:paragraph {\"className\":\"sca-hero__lead\"} -->\n<p class=\"sca-hero__lead\">Find the colors that complement your natural features. Take our free seasonal color analysis quiz and explore your personal palette.</p>\n<!-- /wp:paragraph -->\n\n";
 		$out .= '<!-- wp:buttons --><div class="wp-block-buttons"><!-- wp:button {"className":"is-style-fill"} --><div class="wp-block-button is-style-fill"><a class="wp-block-button__link wp-element-button" href="' . esc_url( $quiz ) . '">Find My Color Season</a></div><!-- /wp:button --><!-- wp:button {"className":"is-style-outline"} --><div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="' . esc_url( home_url( '/12-color-seasons/#palettes' ) ) . '">Explore Color Palettes</a></div><!-- /wp:button --></div><!-- /wp:buttons -->';
+		$out .= '</div><!-- /wp:column --><!-- wp:column {"className":"sca-hero__tool"} --><div class="wp-block-column sca-hero__tool">' . self::sc( '[sca_quiz_start]' ) . '</div><!-- /wp:column --></div><!-- /wp:columns -->';
 		$out .= '</div><!-- /wp:group -->' . "\n\n";
-
-		$out .= self::sc( '[sca_quiz_preview]' );
 
 		$out .= self::p( '<strong>Seasonal color analysis</strong> is a method of finding the colors that suit you best by looking at four qualities of your natural coloring: undertone, depth, chroma and contrast. It sorts people into four color families, Spring, Summer, Autumn and Winter, and then into 12 seasons. Each season has its own palette of clothing, makeup and accessory colors.' );
 
@@ -302,6 +334,9 @@ class SCA_Starter_Content {
 		$out .= self::p( 'Choose a season to see its palette. Select a swatch to copy its hex code, copy the whole palette, or download it as an image.' );
 		$out .= self::sc( '[sca_palette_explorer]' );
 		$out .= self::p( 'Want ready-made combinations? ' . self::link( 'Try the seasonal color palette generator', '/seasonal-color-palette-generator/' ) . '.' );
+		$out .= self::h( 'A short history of seasonal color analysis' );
+		$out .= self::p( 'The idea that some colors flatter a person more than others is old, but the seasonal system has a few clear milestones. The Bauhaus teacher <strong>Johannes Itten</strong> observed that his students tended to prefer colors that echoed their own coloring, and he linked color harmonies to the four seasons in his teaching (his book <em>The Art of Color</em> was published in 1961). In the United States, <strong>Suzanne Caygill</strong> built seasonal palettes for clients in the mid-20th century. <strong>Carole Jackson</strong>\x27s best-seller <em>Color Me Beautiful</em> (1980) made the four-season system popular worldwide.' );
+		$out .= self::p( 'From the 1990s, analysts split each season into three to give people between two families a closer palette. That is the 12-season system used on this site. Its three main dimensions match the three dimensions of the <strong>Munsell color system</strong>: hue (warm or cool), value (light or deep) and chroma (bright or soft). Contrast describes how those dimensions differ between your hair, skin and eyes.' );
 		$out .= self::h( 'How the seasons connect' );
 		$out .= self::p( 'Each season borders others that share its strongest quality. Soft Autumn and Soft Summer are both muted; Bright Spring and Bright Winter are both clear; Deep Autumn and Deep Winter are both deep; Light Spring and Light Summer are both light. True Spring borders True Autumn through warmth, and True Summer borders True Winter through coolness. This is why the quiz always shows a closest alternative.' );
 		$out .= self::p( 'Some sites use other names for the same seasons. Deep is also called Dark, True Summer and True Winter are also called Cool, True Spring and True Autumn are also called Warm, and Bright is also called Clear.' );

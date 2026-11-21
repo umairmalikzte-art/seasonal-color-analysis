@@ -114,6 +114,7 @@ gold vs silver jewelry
 | **Reference** | See colors and copy codes | E | 12 season palette pages. The hub contains the palette explorer. |
 | **Compare (specific pair)** | Decide between two named seasons | F | One written page per commonly confused pair |
 | **Compare (any pair)** | Put any two seasons side by side | – (no query of its own) | Comparison tool |
+| **Apply (tool)** | Make combinations, check a color, wear a trend | outfit color combinations, seasonal color palette generator, trend colors by season | Palette generator |
 | **Apply** | Use the palette | H | Styling guides |
 | **Trust** | Who is behind this | – | About, privacy policy |
 
@@ -157,6 +158,8 @@ Rules that stop pages competing with each other:
 │   ├── /deep-winter-color-palette/      │
 │   ├── /true-winter-color-palette/      │
 │   └── /bright-winter-color-palette/    ┘
+├── /seasonal-color-palette-generator/    generator + trend table (Apply tool): "seasonal color palette generator",
+│                                         "outfit color combinations", "{trend color} for my season"
 ├── /compare-seasons/                     comparison tool (any pair, no target query)
 │   ├── /soft-autumn-vs-soft-summer/      written comparison
 │   ├── /light-spring-vs-light-summer/    (P1 content)

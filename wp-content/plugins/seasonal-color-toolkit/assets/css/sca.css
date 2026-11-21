@@ -276,7 +276,7 @@
 .sca-gen__colors { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .75rem; margin: 0; padding: 0; list-style: none; }
 .sca-gen__color { margin: 0; min-width: 0; }
 .sca-gen__chip { aspect-ratio: 4 / 5; display: flex !important; align-items: flex-start; padding: .6rem !important; text-align: left; }
-.sca-gen__role { font-size: .75rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; opacity: .9; }
+.sca-gen__role { padding: .2em .55em; border-radius: 999px; background: rgba(255, 255, 255, .92); color: #2b2a29; font-size: .72rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
 .sca-gen__lock { margin-top: .4rem; padding: .25rem .7rem; border: 1px solid var(--_line); border-radius: 999px; background: var(--_card); color: var(--_muted); font: 600 .8rem/1.4 inherit; font-family: inherit; cursor: pointer; }
 .sca-gen__lock[aria-pressed="true"] { background: var(--_ink); border-color: var(--_ink); color: #fff; }
 .sca-gen__color.is-locked .sca-gen__chip { box-shadow: 0 0 0 3px var(--_ink); }
@@ -299,3 +299,41 @@
 	.sca-gen__actions .sca-btn--primary { flex: 1 1 100%; }
 }
 @media (prefers-reduced-motion: reduce) { .sca-gen__bar span { transition: none; } }
+
+/* Homepage quiz start card (links only, no JS) */
+.sca-start {
+	--_ink: var(--sca-ink, #2b2a29); --_muted: var(--sca-muted, #6b6560); --_line: var(--sca-line, #e6ddd1);
+	--_bg: var(--sca-bg, #fbf7f1); --_accent: var(--sca-accent, #9f543f);
+	padding: clamp(1.1rem, 2.5vw, 1.6rem); border-radius: 18px; background: #fff; border: 1px solid var(--_line);
+	box-shadow: 0 18px 44px rgba(60, 40, 20, .1); color: var(--_ink);
+}
+.sca-start__meta { margin: 0 0 .9rem; font-size: .85rem; color: var(--_muted); }
+.sca-start__meta .sca-badge { margin: 0 .4rem 0 0; }
+.sca-start__count { margin: 0 0 .2rem; font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--_muted); }
+.sca-start__question { margin: 0 0 .9rem; font-family: var(--sca-serif, Georgia, serif); font-size: 1.3rem; line-height: 1.25; font-weight: 600; }
+.sca-start__options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem; margin: 0; padding: 0; list-style: none; }
+.sca-start__options a {
+	display: flex; align-items: center; gap: .6rem; min-height: 48px; padding: .5rem .75rem; border: 1.5px solid var(--_line);
+	border-radius: 11px; color: var(--_ink); text-decoration: none; font-size: .92rem; line-height: 1.25; transition: border-color .15s ease, background-color .15s ease;
+}
+.sca-start__options a:hover, .sca-start__options a:focus-visible { border-color: var(--_accent); background: #fbf1ec; color: var(--_ink); }
+.sca-start__options a:focus-visible { outline: 3px solid var(--_ink); outline-offset: 2px; }
+.sca-start__options li:last-child { grid-column: 1 / -1; }
+.sca-start__dot { flex: none; width: 22px; height: 22px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, .12); }
+.sca-start__dot--empty { background: repeating-linear-gradient(45deg, #eee, #eee 3px, #fff 3px, #fff 6px); }
+.sca-start__privacy { margin: .8rem 0 0; font-size: .82rem; color: var(--_muted); }
+@media (max-width: 420px) { .sca-start__options { grid-template-columns: 1fr; } }
+
+/* Season "at a glance" facts */
+.sca-profile__title { margin: 1.4rem 0 .6rem; font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--_muted); }
+.sca-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: .6rem 1.5rem; margin: 0; }
+.sca-facts div { padding-top: .6rem; border-top: 1px solid var(--_line); }
+.sca-facts dt { font-weight: 700; font-size: .9rem; }
+.sca-facts dd { margin: .15rem 0 0; color: var(--_muted); font-size: .92rem; }
+
+.sca-updated { margin: -1rem 0 1.5rem; font-size: .85rem; color: var(--sca-muted, #6b6560); }
+
+/* Palette graphic */
+.sca-figure { margin: 1.5rem 0 2rem; }
+.sca-figure img { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--sca-line, #e6ddd1); }
+.sca-figure figcaption { margin-top: .5rem; font-size: .88rem; color: var(--sca-muted, #6b6560); }

@@ -46,8 +46,10 @@
 		});
 	}
 	function ink(hex) {
-		var lab = C.oklab(hex);
-		return lab && lab.L > 0.68 ? '#222222' : '#ffffff';
+		var rgb = C.hexToRgb(hex);
+		if (!rgb) return '#222222';
+		var l = rgb.map(function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+		return 0.2126 * l[0] + 0.7152 * l[1] + 0.0722 * l[2] > 0.179 ? '#222222' : '#ffffff';
 	}
 	function trendBySlug(slug) {
 		for (var i = 0; i < trends.length; i++) if (trends[i].slug === slug) return trends[i];

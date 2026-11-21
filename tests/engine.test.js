@@ -130,4 +130,5 @@ test('labels and colour helpers', () => {
 	assert.equal(E.hexToRgb('nope'), null);
 	assert.equal(E.inkFor('#FFFFFF'), '#222222');
 	assert.equal(E.inkFor('#111111'), '#ffffff');
+	assert.equal(E.inkFor('#C47A5E'), '#222222'); // mid terracotta: dark text has more contrast
 });

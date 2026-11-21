@@ -29,17 +29,18 @@ SCA_Post_Types::register();
 
 $front = SCA_Starter_Content::install();
 
-// Primary menu (PRD 3): Home, Take the Quiz, 12 Color Seasons, Color Palettes,
-// Compare Seasons, Color Guides, About.
+// Primary menu: Home, AI Color Analysis, Take the Quiz, 12 Color Seasons, Skin Tone,
+// Palette Generator, Compare Seasons, Color Guides, About.
 $menu_name = 'Primary';
 $menu      = wp_get_nav_menu_object( $menu_name );
 if ( ! $menu ) {
 	$menu_id = wp_create_nav_menu( $menu_name );
 	$items   = array(
 		array( "Home", home_url( "/" ), "" ),
+		array( "AI Color Analysis", home_url( "/ai-color-analysis/" ), "" ),
 		array( "Take the Quiz", home_url( "/seasonal-color-analysis-quiz/" ), "" ),
 		array( "12 Color Seasons", home_url( "/12-color-seasons/" ), "" ),
-		array( "Color Palettes", home_url( "/12-color-seasons/#palettes" ), "" ),
+		array( "Skin Tone", home_url( "/skin-tone-chart/" ), "" ),
 		array( "Palette Generator", home_url( "/seasonal-color-palette-generator/" ), "" ),
 		array( "Compare Seasons", home_url( "/compare-seasons/" ), "" ),
 		array( "Color Guides", home_url( "/color-guides/" ), "" ),

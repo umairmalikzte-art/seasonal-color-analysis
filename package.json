@@ -5,8 +5,9 @@
   "description": "Seasonal Color Analysis – WordPress site with the Seasonal Color Toolkit plugin",
   "scripts": {
     "start": "wp-playground-cli server --mount=./wp-content/plugins/seasonal-color-toolkit:/wordpress/wp-content/plugins/seasonal-color-toolkit --mount=./wp-content/themes/seasonal-color:/wordpress/wp-content/themes/seasonal-color --mount=./setup:/wordpress/sca-setup --blueprint=./blueprint.json --port=9500",
-    "test": "node --test tests/engine.test.js",
-    "calibrate": "node tools/calibrate.js"
+    "test": "node --test tests/engine.test.js tests/color.test.js",
+    "calibrate": "node tools/calibrate.js",
+    "lint:php": "wp-playground-cli php --mount=./wp-content:/app/wp-content --mount=./setup:/app/setup --mount=./tools:/app/tools -- /app/tools/lint.php"
   },
   "devDependencies": {
     "@wp-playground/cli": "^3.1.65"

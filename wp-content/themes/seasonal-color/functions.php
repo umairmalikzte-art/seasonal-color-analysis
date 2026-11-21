@@ -34,6 +34,14 @@ add_filter(
 	}
 );
 
+/** Switch to the mobile menu below 1100px: the main menu has eight items. */
+add_filter(
+	'generate_mobile_menu_media_query',
+	static function () {
+		return '(max-width: 1100px)';
+	}
+);
+
 /** No sidebar anywhere: the layout is editorial and tool-first. */
 add_filter(
 	'generate_sidebar_layout',
@@ -49,6 +57,7 @@ add_filter(
 		$links = array(
 			'12-color-seasons'             => __( '12 Color Seasons', 'seasonal-color' ),
 			'seasonal-color-analysis-quiz' => __( 'Quiz', 'seasonal-color' ),
+			'seasonal-color-palette-generator' => __( 'Palette Generator', 'seasonal-color' ),
 			'color-guides'                 => __( 'Color Guides', 'seasonal-color' ),
 			'about'                        => __( 'About', 'seasonal-color' ),
 			'privacy-policy'               => __( 'Privacy Policy', 'seasonal-color' ),

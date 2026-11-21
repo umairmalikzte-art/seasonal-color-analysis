@@ -221,3 +221,81 @@
 	.sca-btn, .sca-card, .sca-swatch__chip, .sca-quiz__bar span, .sca-option { transition: none; }
 	.sca-card:hover, .sca-swatch__chip:hover { transform: none; }
 }
+
+/* Palette generator */
+.sca-gen {
+	--_ink: var(--sca-ink, #2b2a29); --_muted: var(--sca-muted, #6b6560); --_bg: var(--sca-bg, #fbf7f1);
+	--_card: var(--sca-card, #fff); --_cream: var(--sca-cream, #f4ede2); --_line: var(--sca-line, #e6ddd1);
+	--_accent: var(--sca-accent, #9f543f); --_radius: var(--sca-radius, 14px);
+	--_serif: var(--sca-serif, Georgia, serif);
+	color: var(--_ink); box-sizing: border-box;
+	padding: clamp(1.1rem, 3vw, 2rem); margin: 0 0 2rem; border-radius: calc(var(--_radius) + 4px);
+	background: var(--_card); border: 1px solid var(--_line); box-shadow: 0 16px 40px rgba(60, 40, 20, .07);
+}
+.sca-gen * { box-sizing: border-box; }
+.sca-gen__top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: .5rem 1.5rem; margin: 0 0 1.25rem; border-bottom: 1px solid var(--_line); }
+.sca-gen__pick { flex: 1 1 260px; max-width: 360px; padding-bottom: .9rem; }
+.sca-gen__hint { margin: .35rem 0 0; font-size: .9rem; color: var(--_muted); }
+.sca-gen__tabs { display: flex; gap: .25rem; margin: 0; }
+.sca-gen__layout { display: grid; gap: 1.5rem; }
+.sca-gen__result { min-height: 330px; }
+@media (min-width: 900px) {
+	.sca-gen__layout { grid-template-columns: minmax(260px, 300px) minmax(0, 1fr); grid-template-areas: "side main"; align-items: start; }
+	.sca-gen__side { grid-area: side; }
+	.sca-gen__main { grid-area: main; }
+	.sca-gen__actions { margin-top: 1rem; }
+}
+.sca-gen__tabs [role="tab"] {
+	padding: .7rem 1rem; border: 0; border-bottom: 3px solid transparent; background: none; color: var(--_muted);
+	font: 600 .98rem/1.2 inherit; font-family: inherit; cursor: pointer; margin-bottom: -1px;
+}
+.sca-gen__tabs [aria-selected="true"] { color: var(--_ink); border-bottom-color: var(--_accent); }
+.sca-gen__tabs [role="tab"]:focus-visible { outline: 3px solid var(--_ink); outline-offset: 2px; }
+.sca-gen__controls { display: grid; gap: 1rem; margin-bottom: 1.25rem; }
+.sca-gen__harmony { margin: 0; padding: 0; border: 0; min-width: 0; }
+.sca-gen__harmony legend { padding: 0; margin-bottom: .45rem; font-weight: 600; font-size: .9rem; }
+.sca-pill { position: relative; display: inline-flex; margin: 0 .35rem .4rem 0; cursor: pointer; }
+.sca-pill input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.sca-pill span { display: inline-block; min-height: 40px; padding: .55em 1em; border: 1.5px solid var(--_line); border-radius: 999px; background: var(--_card); font-weight: 600; font-size: .92rem; line-height: 1.2; }
+.sca-pill input:checked + span { background: var(--_ink); border-color: var(--_ink); color: #fff; }
+.sca-pill input:focus-visible + span { outline: 3px solid var(--_ink); outline-offset: 2px; }
+.sca-gen__trend { margin: 0 0 1.25rem; padding: 1rem 1.2rem; border-radius: var(--_radius); background: var(--_bg); border: 1px solid var(--_line); }
+.sca-gen__trend p { margin: .2rem 0; }
+.sca-gen__trend-head { display: flex; gap: 1rem; align-items: flex-start; }
+.sca-gen__trend-name span { color: var(--_muted); font-size: .9rem; }
+.sca-gen__trend-best { font-size: .95rem; }
+.sca-gen__dot { flex: none; display: inline-block; width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, .1); }
+.sca-gen__dot--small { width: 18px; height: 18px; vertical-align: -3px; }
+.sca-fit { display: inline-block; margin-right: .4rem; padding: .15em .6em; border-radius: 999px; font-size: .78rem; font-weight: 700; letter-spacing: .02em; }
+.sca-fit--in { background: #dfe9d6; color: #2f4a25; }
+.sca-fit--close { background: #e8edd9; color: #3c4a22; }
+.sca-fit--adapt { background: #f5e6cc; color: #5c4210; }
+.sca-fit--far { background: #f2dcd6; color: #6e2b1c; }
+.sca-gen__bar { display: flex; height: 64px; border-radius: 12px; overflow: hidden; margin-bottom: 1rem; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06); }
+.sca-gen__bar span { transition: background-color .25s ease; }
+.sca-gen__colors { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .75rem; margin: 0; padding: 0; list-style: none; }
+.sca-gen__color { margin: 0; min-width: 0; }
+.sca-gen__chip { aspect-ratio: 4 / 5; display: flex !important; align-items: flex-start; padding: .6rem !important; text-align: left; }
+.sca-gen__role { font-size: .75rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; opacity: .9; }
+.sca-gen__lock { margin-top: .4rem; padding: .25rem .7rem; border: 1px solid var(--_line); border-radius: 999px; background: var(--_card); color: var(--_muted); font: 600 .8rem/1.4 inherit; font-family: inherit; cursor: pointer; }
+.sca-gen__lock[aria-pressed="true"] { background: var(--_ink); border-color: var(--_ink); color: #fff; }
+.sca-gen__color.is-locked .sca-gen__chip { box-shadow: 0 0 0 3px var(--_ink); }
+.sca-gen__actions { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin-top: 1.25rem; }
+.sca-check__inputs { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; }
+.sca-check__input { display: grid; gap: .35rem; }
+.sca-check__input label { display: grid; gap: .3rem; font-weight: 600; font-size: .9rem; }
+.sca-check__input input[type="color"] { width: 112px; height: 64px; padding: 0; border: 1px solid var(--_line); border-radius: 12px; background: none; cursor: pointer; }
+.sca-check__input input[type="text"] { width: 112px; min-height: 40px; padding: .4rem .6rem; border: 1px solid var(--_line); border-radius: 8px; font: .9rem/1.2 ui-monospace, Consolas, monospace; }
+.sca-check__summary { font-size: 1.05rem; }
+.sca-check__list { display: grid; gap: .6rem; margin: 0 0 1rem; padding: 0; list-style: none; }
+.sca-check__row { display: flex; align-items: center; gap: .75rem; padding: .75rem 1rem; border-radius: 12px; background: var(--_bg); }
+.sca-check__swatch { flex: none; width: 48px; height: 48px; border-radius: 10px; border: 1px solid rgba(0, 0, 0, .1); }
+.sca-check__arrow { color: var(--_muted); }
+.sca-check__text { display: grid; gap: .2rem; font-size: .92rem; }
+.sca-check__text code { font-size: .85rem; background: none; padding: 0; }
+@media (max-width: 700px) {
+	.sca-gen__colors { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	.sca-gen__bar { height: 48px; }
+	.sca-gen__actions .sca-btn--primary { flex: 1 1 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .sca-gen__bar span { transition: none; } }

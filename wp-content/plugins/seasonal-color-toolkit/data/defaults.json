@@ -4,6 +4,16 @@
     "weights": { "warmth": 1.0, "depth": 1.0, "chroma": 1.0, "contrast": 0.7 },
     "thresholds": { "margin": 0.08, "strong_distance": 0.45, "moderate_distance": 0.8, "min_answered": 10 }
   },
+  "trends_note": "Trend names and sources are factual. Hex values are on-screen approximations chosen for this site (only Cloud Dancer has a widely published hex). Update each season in Color Toolkit > Trends.",
+  "trends": [
+    { "name": "Cloud Dancer", "hex": "#F0EEE9", "collection": "Pantone Color of the Year 2026", "source": "https://www.pantone.com/uk/en-gb/articles/press-releases/pantone-announces-color-of-the-year-2026-cloud-dancer", "note": "A lofty white (PANTONE 11-4201)." },
+    { "name": "Transformative Teal", "hex": "#276C6E", "collection": "WGSN × Coloro Colour of the Year 2026", "source": "https://www.wgsn.com/en/blogs/colour-year-2026-transformative-TEAL", "note": "A blend of dark blue and aqua green." },
+    { "name": "Luminous Blue", "hex": "#2F45A8", "collection": "WGSN × Coloro Colour of the Year 2027", "source": "https://www.wgsn.com/en/blogs/colour-year-2027-luminous-blue", "note": "Coloro 125-28-38." },
+    { "name": "Energy Orange", "hex": "#E0703F", "collection": "WGSN × Coloro S/S 27 Key Colours", "source": "https://www.wgsn.com/en/wgsn/press/press-releases/wgsn-and-coloro-reveal-colour-year-2027-luminous-blue-and-s-s-27-key", "note": "Coloro 018-57-34." },
+    { "name": "Pop Pink", "hex": "#EE9DC0", "collection": "WGSN × Coloro S/S 27 Key Colours", "source": "https://www.wgsn.com/en/wgsn/press/press-releases/wgsn-and-coloro-reveal-colour-year-2027-luminous-blue-and-s-s-27-key", "note": "Coloro 151-73-22." },
+    { "name": "Meadowland Green", "hex": "#86A86A", "collection": "WGSN × Coloro S/S 27 Key Colours", "source": "https://www.wgsn.com/en/wgsn/press/press-releases/wgsn-and-coloro-reveal-colour-year-2027-luminous-blue-and-s-s-27-key", "note": "Coloro 050-61-19." },
+    { "name": "Clay", "hex": "#B98E75", "collection": "WGSN × Coloro S/S 27 Key Colours", "source": "https://www.wgsn.com/en/wgsn/press/press-releases/wgsn-and-coloro-reveal-colour-year-2027-luminous-blue-and-s-s-27-key", "note": "Coloro 014-60-13." }
+  ],
   "seasons": [
     { "slug": "light-spring", "name": "Light Spring", "family": "spring", "warmth": 0.4, "depth": -0.8, "chroma": 0.3, "contrast": -0.4, "alt_names": "", "neighbors": "light-summer,true-spring", "description": "Light, warm and gently clear. Light Spring colors look like a bright spring morning: soft peach, buttercup yellow, aqua and periwinkle." },
     { "slug": "true-spring", "name": "True Spring", "family": "spring", "warmth": 0.9, "depth": -0.2, "chroma": 0.6, "contrast": 0.0, "alt_names": "Warm Spring", "neighbors": "true-autumn,light-spring", "description": "The warmest Spring. True Spring colors are golden, fresh and clear, like coral, daffodil yellow, kelly green and turquoise." },

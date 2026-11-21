@@ -22,7 +22,7 @@ class SCA_Admin {
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'assets' ) );
-		foreach ( array( 'season', 'palette', 'question', 'answers', 'scoring', 'settings', 'delete_question', 'starter' ) as $action ) {
+		foreach ( array( 'season', 'palette', 'question', 'answers', 'scoring', 'settings', 'delete_question', 'starter', 'trends' ) as $action ) {
 			add_action( 'admin_post_sca_save_' . $action, array( __CLASS__, 'save_' . $action ) );
 		}
 	}
@@ -37,6 +37,7 @@ class SCA_Admin {
 			'sca-questions'     => array( __( 'Quiz Questions', 'seasonal-color-toolkit' ), 'page_questions' ),
 			'sca-answers'       => array( __( 'Quiz Answers', 'seasonal-color-toolkit' ), 'page_answers' ),
 			'sca-scoring'       => array( __( 'Scoring Settings', 'seasonal-color-toolkit' ), 'page_scoring' ),
+			'sca-trends'        => array( __( 'Trends', 'seasonal-color-toolkit' ), 'page_trends' ),
 			'sca-comparisons'   => array( __( 'Comparisons', 'seasonal-color-toolkit' ), 'page_comparisons' ),
 			'sca-settings'      => array( __( 'Plugin Settings', 'seasonal-color-toolkit' ), 'page_settings' ),
 		);
@@ -609,6 +610,52 @@ JS;
 		self::back( 'sca-scoring' );
 	}
 
+	/** Trend colors used by the palette generator and the trend table. */
+	public static function page_trends() {
+		self::header( __( 'Trends', 'seasonal-color-toolkit' ), __( 'Trend colors for the palette generator. Add a source for every trend and update the list each season. Hex values are on-screen approximations unless the source publishes one.', 'seasonal-color-toolkit' ) );
+		$rows = SCA_Repository::trends( false );
+		for ( $i = 0; $i < 3; $i++ ) {
+			$rows[] = array( 'name' => '', 'hex' => '', 'collection' => '', 'source' => '', 'note' => '', 'active' => 1 );
+		}
+		self::form_open( 'trends' );
+		echo '<table class="widefat striped"><thead><tr><th style="width:36px"></th><th>' . esc_html__( 'Name', 'seasonal-color-toolkit' ) . '</th><th style="width:110px">HEX</th><th>' . esc_html__( 'Collection', 'seasonal-color-toolkit' ) . '</th><th>' . esc_html__( 'Source URL', 'seasonal-color-toolkit' ) . '</th><th>' . esc_html__( 'Note', 'seasonal-color-toolkit' ) . '</th><th style="width:55px">' . esc_html__( 'Active', 'seasonal-color-toolkit' ) . '</th><th style="width:55px">' . esc_html__( 'Delete', 'seasonal-color-toolkit' ) . '</th></tr></thead><tbody>';
+		foreach ( $rows as $i => $t ) {
+			$n = 'trends[' . $i . ']';
+			echo '<tr><td><span class="sca-swatch-preview" style="background:' . esc_attr( (string) sanitize_hex_color( $t['hex'] ) ) . '"></span></td>';
+			foreach ( array( 'name', 'hex', 'collection', 'source', 'note' ) as $f ) {
+				echo '<td><input type="text" name="' . esc_attr( $n . '[' . $f . ']' ) . '" value="' . esc_attr( $t[ $f ] ) . '" aria-label="' . esc_attr( ucfirst( $f ) ) . '"></td>';
+			}
+			echo '<td><input type="checkbox" name="' . esc_attr( $n ) . '[active]" value="1"' . checked( 1, (int) $t['active'], false ) . ' aria-label="' . esc_attr__( 'Active', 'seasonal-color-toolkit' ) . '"></td>';
+			echo '<td>' . ( '' !== $t['name'] ? '<input type="checkbox" name="' . esc_attr( $n ) . '[delete]" value="1" aria-label="' . esc_attr__( 'Delete', 'seasonal-color-toolkit' ) . '">' : '' ) . '</td></tr>';
+		}
+		echo '</tbody></table><p class="description">' . esc_html__( 'Fill in an empty row to add a trend. Rows without a name or a valid HEX code are skipped.', 'seasonal-color-toolkit' ) . '</p>';
+		submit_button( __( 'Save trends', 'seasonal-color-toolkit' ) );
+		echo '</form></div>';
+	}
+
+	/** Saves the trend list. */
+	public static function save_trends() {
+		self::guard( 'sca_save_trends' );
+		$out = array();
+		foreach ( self::post_array( 'trends' ) as $t ) {
+			$name = sanitize_text_field( (string) ( $t['name'] ?? '' ) );
+			$hex  = sanitize_hex_color( '#' . ltrim( (string) ( $t['hex'] ?? '' ), '#' ) );
+			if ( ! empty( $t['delete'] ) || '' === $name || ! $hex ) {
+				continue;
+			}
+			$out[] = array(
+				'name'       => $name,
+				'hex'        => strtoupper( $hex ),
+				'collection' => sanitize_text_field( (string) ( $t['collection'] ?? '' ) ),
+				'source'     => esc_url_raw( (string) ( $t['source'] ?? '' ) ),
+				'note'       => sanitize_text_field( (string) ( $t['note'] ?? '' ) ),
+				'active'     => empty( $t['active'] ) ? 0 : 1,
+			);
+		}
+		update_option( 'sca_trends', $out, false );
+		self::back( 'sca-trends' );
+	}
+
 	/** Comparisons are a post type; this page links to it and to the tool. */
 	public static function page_comparisons() {
 		self::header( __( 'Comparisons', 'seasonal-color-toolkit' ), __( 'Written comparisons are posts of the "Comparison" type. The comparison tool on the Compare Seasons page works for any two seasons and needs no setup.', 'seasonal-color-toolkit' ) );
@@ -626,7 +673,7 @@ JS;
 		echo '<tr><th scope="row">' . esc_html__( 'Uninstall', 'seasonal-color-toolkit' ) . '</th><td><label><input type="checkbox" name="delete_on_uninstall" value="1"' . checked( 1, (int) $s['delete_on_uninstall'], false ) . '> ' . esc_html__( 'Delete the plugin tables and settings when the plugin is deleted.', 'seasonal-color-toolkit' ) . '</label></td></tr>';
 		echo '</table>';
 		submit_button();
-		echo '</form><h2>' . esc_html__( 'Shortcodes', 'seasonal-color-toolkit' ) . '</h2><p><code>[sca_quiz]</code> <code>[sca_quiz_preview]</code> <code>[sca_season_families]</code> <code>[sca_popular_palettes seasons="soft-autumn,deep-winter"]</code> <code>[sca_season_profile season="soft-autumn"]</code> <code>[sca_palette season="soft-autumn" show="neutral,core,accent"]</code> <code>[sca_season_table]</code> <code>[sca_palette_explorer]</code> <code>[sca_compare a="soft-autumn" b="soft-summer"]</code> <code>[sca_related_seasons]</code> <code>[sca_content_list type="color_guide"]</code></p></div>';
+		echo '</form><h2>' . esc_html__( 'Shortcodes', 'seasonal-color-toolkit' ) . '</h2><p><code>[sca_quiz]</code> <code>[sca_quiz_preview]</code> <code>[sca_season_families]</code> <code>[sca_popular_palettes seasons="soft-autumn,deep-winter"]</code> <code>[sca_season_profile season="soft-autumn"]</code> <code>[sca_palette season="soft-autumn" show="neutral,core,accent"]</code> <code>[sca_season_table]</code> <code>[sca_palette_explorer]</code> <code>[sca_compare a="soft-autumn" b="soft-summer"]</code> <code>[sca_related_seasons]</code> <code>[sca_content_list type="color_guide"]</code> <code>[sca_generator]</code> <code>[sca_trend_table]</code></p></div>';
 	}
 
 	/** Saves general settings. */

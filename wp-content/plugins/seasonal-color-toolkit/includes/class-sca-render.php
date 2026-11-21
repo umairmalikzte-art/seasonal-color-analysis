@@ -83,6 +83,83 @@ class SCA_Render {
 	}
 
 	/**
+	 * sRGB hex → OKLab (same math as assets/js/sca-color.js).
+	 *
+	 * @param string $hex Hex color.
+	 * @return float[]|null [L, a, b]
+	 */
+	public static function oklab( $hex ) {
+		$hex = ltrim( (string) $hex, '#' );
+		if ( ! preg_match( '/^[0-9a-fA-F]{6}$/', $hex ) ) {
+			return null;
+		}
+		$lin = array();
+		foreach ( array( 0, 2, 4 ) as $i ) {
+			$v     = hexdec( substr( $hex, $i, 2 ) ) / 255;
+			$lin[] = $v <= 0.04045 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 );
+		}
+		$cbrt = static function ( $x ) {
+			return $x < 0 ? -pow( -$x, 1 / 3 ) : pow( $x, 1 / 3 );
+		};
+		$l    = $cbrt( 0.4122214708 * $lin[0] + 0.5363325363 * $lin[1] + 0.0514459929 * $lin[2] );
+		$m    = $cbrt( 0.2119034982 * $lin[0] + 0.6806995451 * $lin[1] + 0.1073969566 * $lin[2] );
+		$s    = $cbrt( 0.0883024619 * $lin[0] + 0.2817188376 * $lin[1] + 0.6299787005 * $lin[2] );
+		return array(
+			0.2104542553 * $l + 0.7936177850 * $m - 0.0040720468 * $s,
+			1.9779984951 * $l - 2.4285922050 * $m + 0.4505937099 * $s,
+			0.0259040371 * $l + 0.7827717662 * $m - 0.8086757660 * $s,
+		);
+	}
+
+	/** Perceptual distance between two hex colors (OKLab). */
+	public static function distance( $a, $b ) {
+		$x = self::oklab( $a );
+		$y = self::oklab( $b );
+		if ( ! $x || ! $y ) {
+			return INF;
+		}
+		return sqrt( pow( $x[0] - $y[0], 2 ) + pow( $x[1] - $y[1], 2 ) + pow( $x[2] - $y[2], 2 ) );
+	}
+
+	/**
+	 * Closest wearable palette color of a season.
+	 *
+	 * @return array{color:array,distance:float}|null
+	 */
+	public static function nearest( array $season, $hex ) {
+		$best = null;
+		$dist = INF;
+		foreach ( SCA_Repository::palette( $season['id'] ) as $c ) {
+			if ( 'avoid' === $c['color_category'] ) {
+				continue;
+			}
+			$d = self::distance( $c['hex_code'], $hex );
+			if ( $d < $dist ) {
+				$dist = $d;
+				$best = $c;
+			}
+		}
+		return $best ? array(
+			'color'    => $best,
+			'distance' => $dist,
+		) : null;
+	}
+
+	/** Fit label for a distance (same bands as the JS). */
+	public static function fit( $d ) {
+		if ( $d <= 0.04 ) {
+			return array( 'in', __( 'In your palette', 'seasonal-color-toolkit' ) );
+		}
+		if ( $d <= 0.08 ) {
+			return array( 'close', __( 'Close to your palette', 'seasonal-color-toolkit' ) );
+		}
+		if ( $d <= 0.14 ) {
+			return array( 'adapt', __( 'Wear your version', 'seasonal-color-toolkit' ) );
+		}
+		return array( 'far', __( 'Far from your palette', 'seasonal-color-toolkit' ) );
+	}
+
+	/**
 	 * Four meters for a season or a quiz result.
 	 *
 	 * @param array $values warmth/depth/chroma/contrast values.

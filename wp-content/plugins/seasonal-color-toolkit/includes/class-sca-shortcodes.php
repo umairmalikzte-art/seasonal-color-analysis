@@ -29,6 +29,8 @@ class SCA_Shortcodes {
 			'sca_compare'          => 'compare',
 			'sca_related_seasons'  => 'related_seasons',
 			'sca_content_list'     => 'content_list',
+			'sca_generator'        => 'generator',
+			'sca_trend_table'      => 'trend_table',
 		);
 		foreach ( $codes as $tag => $method ) {
 			add_shortcode( $tag, array( __CLASS__, $method ) );
@@ -321,6 +323,133 @@ class SCA_Shortcodes {
 		return array( $same, $diff );
 	}
 
+	/**
+	 * [sca_generator] Season palette generator with harmonies and trends,
+	 * plus a "check my colors" tab (PRD tool C). Runs in the browser.
+	 */
+	public static function generator() {
+		SCA_Assets::enqueue_generator();
+		$seasons = SCA_Repository::seasons();
+		$trends  = SCA_Repository::trends();
+		$harm    = array(
+			'analogous'     => __( 'Analogous', 'seasonal-color-toolkit' ),
+			'tonal'         => __( 'Tonal', 'seasonal-color-toolkit' ),
+			'complementary' => __( 'Complementary', 'seasonal-color-toolkit' ),
+			'triadic'       => __( 'Triadic', 'seasonal-color-toolkit' ),
+			'neutral'       => __( 'Neutral + pop', 'seasonal-color-toolkit' ),
+		);
+
+		$html  = '<div class="sca-gen" data-sca-generator><div class="sca-gen__top"><div class="sca-gen__pick">';
+		$html .= '<label class="sca-field sca-gen__season"><span>' . esc_html__( 'Your season', 'seasonal-color-toolkit' ) . '</span><select data-gen-season>';
+		foreach ( SCA_Repository::FAMILIES as $family ) {
+			$html .= '<optgroup label="' . esc_attr( SCA_Render::family_name( $family ) ) . '">';
+			foreach ( $seasons as $s ) {
+				if ( $s['season_family'] === $family ) {
+					$html .= '<option value="' . esc_attr( $s['season_slug'] ) . '"' . selected( 'soft-autumn', $s['season_slug'], false ) . '>' . esc_html( $s['season_name'] ) . '</option>';
+				}
+			}
+			$html .= '</optgroup>';
+		}
+		$html .= '</select></label>';
+		$html .= '<p class="sca-gen__hint">' . sprintf(
+			/* translators: %s: quiz link */
+			esc_html__( 'Not sure? %s', 'seasonal-color-toolkit' ),
+			'<a href="' . esc_url( SCA_Repository::page_url( 'seasonal-color-analysis-quiz' ) ) . '">' . esc_html__( 'Take the quiz first', 'seasonal-color-toolkit' ) . '</a>'
+		) . '</p></div>';
+
+		$html .= '<div class="sca-gen__tabs" role="tablist" aria-label="' . esc_attr__( 'Generator mode', 'seasonal-color-toolkit' ) . '">';
+		$html .= '<button type="button" role="tab" id="sca-gen-tab-1" aria-controls="sca-gen-panel-1" aria-selected="true">' . esc_html__( 'Generate outfit colors', 'seasonal-color-toolkit' ) . '</button>';
+		$html .= '<button type="button" role="tab" id="sca-gen-tab-2" aria-controls="sca-gen-panel-2" aria-selected="false" tabindex="-1">' . esc_html__( 'Check my colors', 'seasonal-color-toolkit' ) . '</button></div></div>';
+
+		// Panel 1: generator.
+		$html .= '<div class="sca-gen__panel" role="tabpanel" id="sca-gen-panel-1" aria-labelledby="sca-gen-tab-1"><div class="sca-gen__layout">';
+		$side  = '<div class="sca-gen__side"><div class="sca-gen__controls"><fieldset class="sca-gen__harmony"><legend>' . esc_html__( 'Color harmony', 'seasonal-color-toolkit' ) . '</legend>';
+		foreach ( $harm as $key => $label ) {
+			$side .= '<label class="sca-pill"><input type="radio" name="sca-harmony" value="' . esc_attr( $key ) . '"' . checked( 'analogous', $key, false ) . '><span>' . esc_html( $label ) . '</span></label>';
+		}
+		$side .= '</fieldset>';
+		if ( $trends ) {
+			$side .= '<label class="sca-field"><span>' . esc_html__( 'Start from a trend color (optional)', 'seasonal-color-toolkit' ) . '</span><select data-gen-trend><option value="">' . esc_html__( 'No trend: surprise me', 'seasonal-color-toolkit' ) . '</option>';
+			$groups = array();
+			foreach ( $trends as $t ) {
+				$groups[ $t['collection'] ][] = $t;
+			}
+			foreach ( $groups as $collection => $list ) {
+				$side .= '<optgroup label="' . esc_attr( $collection ) . '">';
+				foreach ( $list as $t ) {
+					$side .= '<option value="' . esc_attr( $t['slug'] ) . '">' . esc_html( $t['name'] ) . '</option>';
+				}
+				$side .= '</optgroup>';
+			}
+			$side .= '</select></label>';
+		}
+		$side .= '</div>';
+		$side .= '<div class="sca-gen__trend" data-gen-trend-out hidden></div></div>';
+		$html .= '<div class="sca-gen__main">';
+		$html .= '<div class="sca-gen__result" data-gen-result aria-live="polite"><noscript><p class="sca-notice">' . esc_html__( 'The generator needs JavaScript. You can still browse every season palette.', 'seasonal-color-toolkit' ) . ' <a href="' . esc_url( SCA_Repository::page_url( '12-color-seasons' ) . '#palettes' ) . '">' . esc_html__( 'See all palettes', 'seasonal-color-toolkit' ) . '</a></p></noscript></div>';
+		$html .= '<div class="sca-gen__actions"><button type="button" class="sca-btn sca-btn--primary" data-gen-shuffle>' . esc_html__( 'Generate new combination', 'seasonal-color-toolkit' ) . '</button>';
+		$html .= '<button type="button" class="sca-btn sca-btn--ghost" data-gen-copy>' . esc_html__( 'Copy codes', 'seasonal-color-toolkit' ) . '</button>';
+		$html .= '<button type="button" class="sca-btn sca-btn--ghost" data-gen-download>' . esc_html__( 'Download (PNG)', 'seasonal-color-toolkit' ) . '</button>';
+		$html .= '<span class="sca-palette__status" data-gen-status role="status" aria-live="polite"></span></div>';
+		$html .= '</div>' . $side . '</div></div>';
+
+		// Panel 2: check my colors.
+		$html .= '<div class="sca-gen__panel" role="tabpanel" id="sca-gen-panel-2" aria-labelledby="sca-gen-tab-2" hidden>';
+		$html .= '<p>' . esc_html__( 'Pick up to three colors, for example from clothes you own or want to buy, to see how close they are to your season\'s palette.', 'seasonal-color-toolkit' ) . '</p><div class="sca-check__inputs">';
+		foreach ( array( '#2f45a8', '#e0703f', '#f0eee9' ) as $i => $default ) {
+			/* translators: %d: color number */
+			$label = sprintf( __( 'Color %d', 'seasonal-color-toolkit' ), $i + 1 );
+			$html .= '<div class="sca-check__input"><label><span>' . esc_html( $label ) . '</span><input type="color" value="' . esc_attr( $default ) . '" data-check-color></label>';
+			/* translators: %d: color number */
+			$html .= '<input type="text" value="' . esc_attr( strtoupper( $default ) ) . '" data-check-hex maxlength="7" spellcheck="false" aria-label="' . esc_attr( sprintf( __( 'Color %d hex code', 'seasonal-color-toolkit' ), $i + 1 ) ) . '"></div>';
+		}
+		$html .= '</div><div data-check-out aria-live="polite"></div>';
+		$html .= '<p class="sca-note">' . esc_html__( 'Closeness to a palette is measured on screen colors only. It is a guide: whether a color suits you depends on how it looks next to your face in daylight, not on its hex code alone.', 'seasonal-color-toolkit' ) . '</p></div>';
+
+		return $html . '</div>';
+	}
+
+	/**
+	 * [sca_trend_table] Each trend color, its source and the seasons it suits
+	 * most closely. Rendered on the server so search engines can read it.
+	 */
+	public static function trend_table() {
+		$trends  = SCA_Repository::trends();
+		$seasons = SCA_Repository::seasons();
+		if ( ! $trends || ! $seasons ) {
+			return '';
+		}
+		$html  = '<div class="sca-table-wrap" tabindex="0" role="region" aria-label="' . esc_attr__( 'Trend colors by season', 'seasonal-color-toolkit' ) . '"><table class="sca-table sca-table--trends">';
+		$html .= '<thead><tr><th scope="col">' . esc_html__( 'Trend color', 'seasonal-color-toolkit' ) . '</th><th scope="col">' . esc_html__( 'Source', 'seasonal-color-toolkit' ) . '</th><th scope="col">' . esc_html__( 'Suits most closely', 'seasonal-color-toolkit' ) . '</th><th scope="col">' . esc_html__( 'Furthest from', 'seasonal-color-toolkit' ) . '</th></tr></thead><tbody>';
+		foreach ( $trends as $t ) {
+			$fits = array();
+			foreach ( $seasons as $s ) {
+				$n = SCA_Render::nearest( $s, $t['hex'] );
+				if ( $n ) {
+					$fits[] = array( $s, $n['distance'] );
+				}
+			}
+			usort(
+				$fits,
+				static function ( $a, $b ) {
+					return $a[1] <=> $b[1];
+				}
+			);
+			$best = array_slice( $fits, 0, 3 );
+			$far  = end( $fits );
+			$html .= '<tr><th scope="row"><span class="sca-gen__dot sca-gen__dot--small" style="background:' . esc_attr( $t['hex'] ) . '" aria-hidden="true"></span> ' . esc_html( $t['name'] ) . '</th>';
+			$html .= '<td>' . ( $t['source'] ? '<a href="' . esc_url( $t['source'] ) . '" rel="noopener nofollow" target="_blank">' . esc_html( $t['collection'] ) . '</a>' : esc_html( $t['collection'] ) ) . '</td><td>';
+			$links = array();
+			foreach ( $best as $b ) {
+				$links[] = '<a href="' . esc_url( SCA_Repository::season_url( $b[0]['season_slug'] ) ) . '">' . esc_html( $b[0]['season_name'] ) . '</a>';
+			}
+			$html .= implode( ', ', $links ) . '</td><td>' . esc_html( $far ? $far[0]['season_name'] : '–' ) . '</td></tr>';
+		}
+		$html .= '</tbody></table></div>';
+		$html .= '<p class="sca-note">' . esc_html__( 'Trend names and sources are factual. The hex values are on-screen approximations, so colors in stores will vary. "Suits most closely" means the season palette has a very similar color.', 'seasonal-color-toolkit' ) . '</p>';
+		return $html;
+	}
+
 	/** [sca_related_seasons season=""] Neighbours and family members. */
 	public static function related_seasons( $atts ) {
 		$s = self::season_from( (array) $atts );
@@ -416,7 +545,7 @@ class SCA_Shortcodes {
 	 */
 	public static function robots( $robots ) {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( is_singular() && ( isset( $_GET['a'] ) || isset( $_GET['b'] ) || isset( $_GET['season'] ) ) ) {
+		if ( is_singular() && ( isset( $_GET['a'] ) || isset( $_GET['b'] ) || isset( $_GET['season'] ) || isset( $_GET['harmony'] ) || isset( $_GET['trend'] ) ) ) {
 			$robots['noindex'] = true;
 			$robots['follow']  = true;
 		}

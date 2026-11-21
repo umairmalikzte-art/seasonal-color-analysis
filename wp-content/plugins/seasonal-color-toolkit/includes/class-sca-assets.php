@@ -36,6 +36,8 @@ class SCA_Assets {
 		wp_register_style( 'sca', SCA_URL . 'assets/css/sca.css', array(), self::ver( 'assets/css/sca.css' ) );
 		wp_register_script( 'sca-engine', SCA_URL . 'assets/js/sca-engine.js', array(), self::ver( 'assets/js/sca-engine.js' ), $defer );
 		wp_register_script( 'sca-palette', SCA_URL . 'assets/js/sca-palette.js', array(), self::ver( 'assets/js/sca-palette.js' ), $defer );
+		wp_register_script( 'sca-color', SCA_URL . 'assets/js/sca-color.js', array(), self::ver( 'assets/js/sca-color.js' ), $defer );
+		wp_register_script( 'sca-generator', SCA_URL . 'assets/js/sca-generator.js', array( 'sca-color', 'sca-palette' ), self::ver( 'assets/js/sca-generator.js' ), $defer );
 		wp_register_script( 'sca-quiz', SCA_URL . 'assets/js/sca-quiz.js', array( 'sca-engine', 'sca-palette' ), self::ver( 'assets/js/sca-quiz.js' ), $defer );
 	}
 
@@ -56,6 +58,9 @@ class SCA_Assets {
 		if ( has_shortcode( $content, 'sca_quiz' ) ) {
 			self::enqueue_quiz();
 		}
+		if ( has_shortcode( $content, 'sca_generator' ) ) {
+			self::enqueue_generator();
+		}
 		foreach ( array( 'sca_palette', 'sca_palette_explorer', 'sca_compare' ) as $tag ) {
 			if ( has_shortcode( $content, $tag ) ) {
 				self::enqueue_palette();
@@ -67,6 +72,25 @@ class SCA_Assets {
 	public static function enqueue_palette() {
 		wp_enqueue_style( 'sca' );
 		wp_enqueue_script( 'sca-palette' );
+	}
+
+	/** @var bool Generator config already printed. */
+	private static $gen_done = false;
+
+	/** Palette generator and color checker, with seasons and trends. */
+	public static function enqueue_generator() {
+		self::enqueue_palette();
+		wp_enqueue_script( 'sca-generator' );
+		if ( ! self::$gen_done ) {
+			self::$gen_done = true;
+			$config = SCA_Repository::frontend_config( false );
+			$data   = array(
+				'seasons'       => $config['seasons'],
+				'trends'        => SCA_Repository::trends(),
+				'defaultSeason' => 'soft-autumn',
+			);
+			wp_add_inline_script( 'sca-generator', 'window.SCA_GEN = ' . wp_json_encode( $data ) . ';', 'before' );
+		}
 	}
 
 	/** Quiz app plus its configuration (questions, scores, seasons). */

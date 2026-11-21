@@ -156,6 +156,14 @@ class SCA_Install {
 			);
 		}
 
+		if ( false === get_option( 'sca_trends' ) && ! empty( $data['trends'] ) ) {
+			$trends = array();
+			foreach ( $data['trends'] as $tr ) {
+				$trends[] = array_merge( $tr, array( 'active' => 1 ) );
+			}
+			add_option( 'sca_trends', $trends, '', false );
+		}
+
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name from $wpdb->prefix.
 		if ( 0 === (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$t['seasons']}" ) ) {
 			foreach ( $data['seasons'] as $i => $s ) {

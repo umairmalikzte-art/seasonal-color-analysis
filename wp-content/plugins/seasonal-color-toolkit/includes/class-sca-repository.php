@@ -196,6 +196,33 @@ class SCA_Repository {
 		);
 	}
 
+	/**
+	 * Trend colors (admin-editable option, seeded from defaults.json).
+	 *
+	 * @param bool $active_only Only active trends.
+	 * @return array<int,array{slug:string,name:string,hex:string,collection:string,source:string,note:string,active:int}>
+	 */
+	public static function trends( $active_only = true ) {
+		$list = get_option( 'sca_trends', array() );
+		$out  = array();
+		foreach ( is_array( $list ) ? $list : array() as $t ) {
+			$hex = sanitize_hex_color( $t['hex'] ?? '' );
+			if ( ! $hex || empty( $t['name'] ) || ( $active_only && empty( $t['active'] ) ) ) {
+				continue;
+			}
+			$out[] = array(
+				'slug'       => sanitize_title( $t['name'] ),
+				'name'       => (string) $t['name'],
+				'hex'        => strtoupper( $hex ),
+				'collection' => (string) ( $t['collection'] ?? '' ),
+				'source'     => (string) ( $t['source'] ?? '' ),
+				'note'       => (string) ( $t['note'] ?? '' ),
+				'active'     => empty( $t['active'] ) ? 0 : 1,
+			);
+		}
+		return $out;
+	}
+
 	/** Comma list → trimmed array. */
 	public static function split( $value ) {
 		return array_values( array_filter( array_map( 'trim', explode( ',', (string) $value ) ) ) );
@@ -279,6 +306,7 @@ class SCA_Repository {
 			'questions' => $questions,
 			'quizUrl'    => self::page_url( 'seasonal-color-analysis-quiz' ),
 			'compareUrl' => self::page_url( 'compare-seasons' ),
+			'generatorUrl' => self::page_url( 'seasonal-color-palette-generator' ),
 		);
 	}
 

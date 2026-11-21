@@ -95,6 +95,7 @@ class SCA_Starter_Content {
 		$home = self::insert( 'page', 'home', 'Seasonal Color Analysis', self::home(), 'Find the colors that suit you with a free seasonal color analysis quiz, 12 season color palettes with hex codes, and practical styling guides.', 0 );
 		self::insert( 'page', 'seasonal-color-analysis-quiz', 'Free Seasonal Color Analysis Quiz', self::quiz_page(), 'Take a free 15-question seasonal color analysis quiz. No photo, no sign-up. Get your likely season, the closest alternative and your palette.', 1 );
 		self::insert( 'page', '12-color-seasons', 'The 12 Color Seasons', self::seasons_page(), 'The 12 color seasons explained: how each one differs in temperature, depth, chroma and contrast, with every palette and its hex codes.', 2 );
+		self::insert( 'page', 'seasonal-color-palette-generator', 'Seasonal Color Palette Generator', self::generator_page(), 'Generate outfit color combinations from your season\'s palette, see how to wear the 2026 and 2027 trend colors in your season, and check any color against your palette.', 3 );
 		self::insert( 'page', 'compare-seasons', 'Compare Seasons', self::compare_page(), 'Compare any two of the 12 color seasons side by side: temperature, depth, chroma, contrast and both palettes.', 3 );
 		self::insert( 'page', 'color-guides', 'Color Guides', self::guides_page(), 'Practical guides to seasonal color analysis: undertones, doing an analysis at home and telling similar seasons apart.', 4 );
 		self::insert( 'page', 'about', 'About', self::about_page(), 'Who is behind this site, how the quiz and palettes were made, and what a free online color analysis can and cannot tell you.', 5 );
@@ -177,6 +178,7 @@ class SCA_Starter_Content {
 		$out .= self::p( esc_html( $c['jewelry'] ) );
 		$out .= self::h( 'Outfit combinations' );
 		$out .= self::ul( array_map( 'esc_html', $c['outfits'] ) );
+		$out .= self::p( 'For more combinations, ' . '<a href="' . esc_url( home_url( '/seasonal-color-palette-generator/?season=' . $slug ) ) . '" rel="nofollow">' . esc_html( 'generate ' . $name . ' outfit colors' ) . '</a>.' );
 		if ( $first ) {
 			$out .= self::h( 'Is it ' . esc_html( $name ) . ' or ' . esc_html( $first['season_name'] ) . '?' );
 			$cmp  = 'compare-seasons/?a=' . $slug . '&b=' . $first['season_slug'];
@@ -223,6 +225,7 @@ class SCA_Starter_Content {
 
 		$out .= self::h( 'Popular color palettes' );
 		$out .= self::sc( '[sca_popular_palettes]' );
+		$out .= self::p( 'Turn any palette into outfit combinations, or see how to wear this year\'s trend colors, with the ' . self::link( 'seasonal color palette generator', '/seasonal-color-palette-generator/' ) . '.' );
 
 		$out .= self::h( 'How seasonal color analysis works' );
 		$out .= self::p( 'Every season is a combination of four qualities. The quiz estimates each one from your answers and finds the season whose profile is closest.' );
@@ -298,6 +301,7 @@ class SCA_Starter_Content {
 		$out .= self::h( 'All 12 color palettes', 2, 'palettes' );
 		$out .= self::p( 'Choose a season to see its palette. Select a swatch to copy its hex code, copy the whole palette, or download it as an image.' );
 		$out .= self::sc( '[sca_palette_explorer]' );
+		$out .= self::p( 'Want ready-made combinations? ' . self::link( 'Try the seasonal color palette generator', '/seasonal-color-palette-generator/' ) . '.' );
 		$out .= self::h( 'How the seasons connect' );
 		$out .= self::p( 'Each season borders others that share its strongest quality. Soft Autumn and Soft Summer are both muted; Bright Spring and Bright Winter are both clear; Deep Autumn and Deep Winter are both deep; Light Spring and Light Summer are both light. True Spring borders True Autumn through warmth, and True Summer borders True Winter through coolness. This is why the quiz always shows a closest alternative.' );
 		$out .= self::p( 'Some sites use other names for the same seasons. Deep is also called Dark, True Summer and True Winter are also called Cool, True Spring and True Autumn are also called Warm, and Bright is also called Clear.' );
@@ -306,6 +310,36 @@ class SCA_Starter_Content {
 				array( 'What is the difference between the 4-season and 12-season systems?', 'The 4-season system only separates warm from cool and light from deep. The 12-season system adds chroma (soft or bright), so people who are between two families get a closer palette.' ),
 				array( 'Which season is the most common?', 'There is no reliable data on how common each season is, so we do not give a number.' ),
 				array( 'Are Deep Winter and Dark Winter the same?', 'Yes. Deep and Dark are two names for the same seasons.' ),
+			)
+		);
+		return $out;
+	}
+
+	private static function generator_page() {
+		$out  = self::p( 'Build <strong>outfit color combinations from your season\'s palette</strong>, and see how to wear this year\'s trend colors in your season.' );
+		$out .= self::sc( '[sca_generator]' );
+		$out .= self::h( 'How the generator works' );
+		$out .= self::p( 'Choose your season and a color harmony, and the generator builds a five-color outfit palette from your season\'s curated colors. Start from a current trend color to see your season\'s version of it, or switch to "Check my colors" to test clothes you already own. Every suggested color comes from your palette, never from random generation.' );
+		$out .= self::p( 'The generator picks a main color from your season and then chooses supporting colors by their position on the color wheel, using a perceptual color space (OKLab) so that the steps look even to the eye.' );
+		$out .= self::ul(
+			array(
+				'<strong>Tonal:</strong> shades of one color family, light to deep. Calm and elegant, and easy for low-contrast seasons.',
+				'<strong>Analogous:</strong> neighbours on the color wheel, such as teal, jade and green. Harmonious and low risk.',
+				'<strong>Complementary:</strong> a color with its opposite, such as rust with teal. Lively; keep the opposite color small.',
+				'<strong>Triadic:</strong> three colors evenly spaced around the wheel. Playful; best for clear and bright seasons.',
+				'<strong>Neutral + pop:</strong> three neutrals with one saturated color and an accent. The easiest everyday formula.',
+			)
+		);
+		$out .= self::p( 'Lock any color you like and generate again to replace only the others. Copy the hex codes or download the palette as an image to take shopping.' );
+		$out .= self::h( 'How to wear this year\'s trend colors in your season' );
+		$out .= self::p( 'Trend colors are chosen for everyone, so they will not suit every season equally. The table shows which seasons have a very similar color in their palette. If a trend is far from yours, wear your season\'s closest version, or keep the trend color away from your face, in shoes, bags or trousers.' );
+		$out .= self::sc( '[sca_trend_table]' );
+		$out .= self::faqs(
+			array(
+				array( 'Is this a random color palette generator?', 'No. Unlike general palette generators for designers, every color comes from your season\'s curated palette. The harmony rule only decides which of those colors go together.' ),
+				array( 'Can I wear a trend color that is not in my season?', 'Yes. Wear your season\'s closest version near your face, or wear the trend color further from your face. The generator shows your version for each trend.' ),
+				array( 'Where do the trend colors come from?', 'From published color forecasts such as the Pantone Color of the Year and the WGSN and Coloro Colour of the Year and Key Colours. Each trend links to its source. The hex values here are on-screen approximations.' ),
+				array( 'How do I check clothes I already own?', 'Use the "Check my colors" tab. Pick up to three colors with the color picker or type a hex code, and see the closest color in your palette.' ),
 			)
 		);
 		return $out;

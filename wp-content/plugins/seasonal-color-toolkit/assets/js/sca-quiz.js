@@ -216,6 +216,7 @@
 
 		html += '<div class="sca-result__actions">';
 		html += '<a class="sca-btn sca-btn--primary" href="' + esc(s.url) + '">Read the ' + esc(s.name) + ' guide</a>';
+		if (cfg.generatorUrl) html += '<a class="sca-btn sca-btn--ghost" href="' + esc(cfg.generatorUrl + (cfg.generatorUrl.indexOf('?') === -1 ? '?' : '&') + 'season=' + s.slug) + '">Generate outfit colors</a>';
 		html += '<button type="button" class="sca-btn sca-btn--ghost" data-share="' + esc(s.slug) + '">Share my result</button>';
 		html += '<button type="button" class="sca-btn sca-btn--ghost" data-restart>Restart the quiz</button>';
 		html += '<span class="sca-quiz__share-status" role="status" aria-live="polite"></span>';

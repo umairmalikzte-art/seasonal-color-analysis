@@ -40,6 +40,7 @@ if ( ! $menu ) {
 		array( "Take the Quiz", home_url( "/seasonal-color-analysis-quiz/" ), "" ),
 		array( "12 Color Seasons", home_url( "/12-color-seasons/" ), "" ),
 		array( "Color Palettes", home_url( "/12-color-seasons/#palettes" ), "" ),
+		array( "Palette Generator", home_url( "/seasonal-color-palette-generator/" ), "" ),
 		array( "Compare Seasons", home_url( "/compare-seasons/" ), "" ),
 		array( "Color Guides", home_url( "/color-guides/" ), "" ),
 		array( "About", home_url( "/about/" ), "" ),
